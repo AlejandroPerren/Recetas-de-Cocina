@@ -3,7 +3,7 @@ import { IUser } from "../../domain/interfaces/IUser.interface";
 
 export interface IUserController {
     //Get all users
-    getUsers(): Promise<any>
+    getAllUsers(): Promise<any>
 }
 
 export interface IAuthController {

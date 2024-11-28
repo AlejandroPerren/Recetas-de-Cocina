@@ -7,7 +7,7 @@ import { IUser } from "../interfaces/IUser.interface";
 //MSG
 import { LogError } from "../../utils/logger"
 
-//Get Entity
+//Intance of entity
 const userModel = userEntity();
 
 //ORM handles Mongoose model methods

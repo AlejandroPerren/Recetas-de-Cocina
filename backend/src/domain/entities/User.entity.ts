@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 export const userEntity = () => {
     const userSchema = new mongoose.Schema({
