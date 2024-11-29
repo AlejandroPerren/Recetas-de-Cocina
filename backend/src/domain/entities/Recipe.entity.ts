@@ -39,7 +39,7 @@ export const recipeEntity = () => {
             ref: 'User',
         },
     }, { timestamps: true });
-    return mongoose.model.Recipe || mongoose.model("Recipe", recipeSchema);
+    return mongoose.models.Recipe || mongoose.model("Recipe", recipeSchema);
 }
 
 
