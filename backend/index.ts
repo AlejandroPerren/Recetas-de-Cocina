@@ -12,6 +12,7 @@ import { LogError } from "./src/utils/logger";
 dotenv.config();
 
 
+
 const MONGO_CONNECTION: any  = process.env.MONGO_CONNECTION;
 const PORT: string | number = process.env.PORT || 4000;
 

@@ -1,15 +1,15 @@
-import React from 'react';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ISignUp } from '../models/AuthModel';
 
 import { SignUp } from '../network/fetchApiServices';
+import { useState } from 'react';
 
 // Yup Validation
 const schema = yup.object().shape({
-  nombre: yup.string().required('El nombre es obligatorio'),
+  name: yup.string().required('El nombre es obligatorio'),
   email: yup
     .string()
     .email('Debe ser un correo válido')
@@ -20,24 +20,31 @@ const schema = yup.object().shape({
     .required('La contraseña es obligatoria'),
 });
 
-
 const SignUpForm = () => {
-
   // React Hook Form Config
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
+    watch, 
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async(data: ISignUp) => {
-    await SignUp(data)
-    console.log('Datos del formulario:', data);
-    
-    reset(); 
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const formData = watch(); 
+
+  //Send of Form Config
+  const onSubmit = async (data: ISignUp) => {
+    try {
+      await SignUp(data);
+      reset(); 
+      setServerError(null); 
+    } catch (error) {
+      setServerError(`Ocurrió un error al registrarte. Inténtalo de nuevo: ${error}` );
+    }
   };
 
   return (
@@ -47,19 +54,24 @@ const SignUpForm = () => {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" flexDirection="column" gap={3}>
-         
+  
           <Controller
-            name="nombre"
+            name="name"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField
-                {...field}
-                label="Nombre"
-                variant="outlined"
-                error={!!errors.nombre}
-                helperText={errors.nombre?.message}
-              />
+              <Box>
+                <TextField
+                  {...field}
+                  label="Nombre"
+                  variant="outlined"
+                  error={!!errors.name}
+                  fullWidth
+                />
+                <Typography color="error" variant="body2">
+                  {errors.name?.message}
+                </Typography>
+              </Box>
             )}
           />
 
@@ -68,14 +80,19 @@ const SignUpForm = () => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField
-                {...field}
-                label="Correo Electrónico"
-                type="email"
-                variant="outlined"
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
+              <Box>
+                <TextField
+                  {...field}
+                  label="Correo Electrónico"
+                  type="email"
+                  variant="outlined"
+                  error={!!errors.email}
+                  fullWidth
+                />
+                <Typography color="error" variant="body2">
+                  {errors.email?.message}
+                </Typography>
+              </Box>
             )}
           />
 
@@ -84,14 +101,19 @@ const SignUpForm = () => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField
-                {...field}
-                label="Contraseña"
-                type="password"
-                variant="outlined"
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
+              <Box>
+                <TextField
+                  {...field}
+                  label="Contraseña"
+                  type="password"
+                  variant="outlined"
+                  error={!!errors.password}
+                  fullWidth
+                />
+                <Typography color="error" variant="body2">
+                  {errors.password?.message}
+                </Typography>
+              </Box>
             )}
           />
 
@@ -100,6 +122,19 @@ const SignUpForm = () => {
           </Button>
         </Box>
       </form>
+
+  
+      {serverError && (
+        <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
+          {serverError}
+        </Typography>
+      )}
+
+  
+      <Box marginTop={4}>
+        <Typography variant="h6">Valores actuales del formulario:</Typography>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
+      </Box>
     </Container>
   );
 };

@@ -24,9 +24,15 @@ server.use(express.urlencoded({extended: true, limit: '50m'}))
 //ENV CONFIG 
 dotenv.config()
 
+//security options
+const corsOptions = {
+    origin: "http://localhost:5173", 
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  };
+
 //Security Config
 server.use(helmet());
-server.use(cors());
+server.use(cors(corsOptions));
 
 //Static Server
 server.use(express.static('public'));

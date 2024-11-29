@@ -12,7 +12,7 @@ const authRouter = express.Router();
 // Middleware
 const jsonParser = bodyParser.json();
 
-
+// TODO: express-validator
 //Route of Register
 authRouter.route('/register')
     .post(jsonParser, async (req: Request, res: Response) => {

@@ -1,8 +1,11 @@
-const backendDomain: string = import.meta.env.VITE_backendDomain
+const backendDomain: string = import.meta.env.VITE_backendDomain || "http://localhost:8080/api";  
+if (!backendDomain) {
+    throw new Error("La variable de entorno VITE_backendDomain no está definida.");
+  }
 
 const SummaryApi = {
     SignUp : {
-        url: `${backendDomain}/api/auth/register`,
+        url: `${backendDomain}/auth/register`,
         method: `post`
     }
 }
