@@ -4,13 +4,22 @@ import bodyParser from "body-parser";
 
 //Security Auth
 import bcrypt from "bcrypt";
+
+//Interface User
 import { IUser } from "../domain/interfaces/IUser.interface";
+
+//Controller
 import { AuthController } from "../controller/AuthController";
+
 //config Router
 const authRouter = express.Router();
 
 // Middleware
 const jsonParser = bodyParser.json();
+
+// Instantiate the controller
+const controller: AuthController = new AuthController();
+
 
 // TODO: express-validator
 //Route of Register
@@ -29,9 +38,6 @@ authRouter.route('/register')
                 email,
                 password: hashPassword
             };
-
-            // Instantiate the controller
-            const controller: AuthController = new AuthController();
 
             //send Response
             const response = await controller.registerUser(newUser);

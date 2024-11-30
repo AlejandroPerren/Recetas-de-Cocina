@@ -61,6 +61,27 @@
 				"parameters": []
 			}
 		},
+		"/api/recipes": {
+			"get": {
+				"operationId": "GetAllRecipes",
+				"responses": {
+					"200": {
+						"description": "all users",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"description": "Endpoint to retrieve recipes from the \"Recipes\" collection in the DB.",
+				"tags": [
+					"RecipesController"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/api/auth/register": {
 			"post": {
 				"operationId": "RegisterUser",

@@ -15,7 +15,7 @@ userRouter
     .get(async (req: Request, res: Response)=>{
         try {
             //Obtain the Response
-            const response = await controller.getAllUsers()
+            const response = await controller.getAllUsers();
 
             //send response
             res.status(200).send(response);

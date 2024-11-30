@@ -16,6 +16,11 @@ import { LogError, LogSuccess } from "../utils/logger";
 @Route("/api/auth")
 @Tags("AuthController")
 export class AuthController {
+      /**
+     * Endpoint to Create User from the "User" collection in the DB.
+     * @param  user information body
+     * @returns MSG User result, if result = Successfull, save User 
+     */
     @Post("/register")
     public async registerUser(@Body() user: IUser): Promise<any> {
         if (user) {

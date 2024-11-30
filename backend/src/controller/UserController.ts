@@ -1,5 +1,5 @@
 // TSOA MSG
-import { Body, Delete, Get, Path, Post, Put, Query, Route, Tags } from "tsoa";
+import { Get,  Route, Tags } from "tsoa";
 
 //ORM - Users Collection
 import { getAllUsers } from "../domain/orm/Users.orm";

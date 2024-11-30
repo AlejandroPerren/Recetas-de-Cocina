@@ -1,11 +1,11 @@
 /*
 Root Router He takes care of the requests
-
 */
 import express from "express";
-//Authentication Routes
+//Routes
 import authRouter from "./AuthRoutes";
 import userRouter from "./UserRoutes";
+import recipesRouter from "./RecipesRoutes";
 
 //Instance of server
 const server = express();
@@ -20,6 +20,9 @@ server.use("/", rootRouter); // http://localhost:8080/api/
 server.use("/auth", authRouter); // http://localhost:8080/api/auth  -->  authRouter
 
 //Users Router
-server.use("/users", userRouter);
+server.use("/users", userRouter); // http://localhost:8080/api/users  -->  userRouter
+
+//Recipes Router
+server.use("/recipes", recipesRouter) //http://localhost:8080/api/recipes  -->  recipesRouter
 
 export default server;

@@ -11,10 +11,11 @@ import { userEntity } from "../entities/User.entity";
 /**
  * Method to obtain all Users from Collerction "users"
  */
+
 //instance of entity
 const userModel = userEntity();
 
-export const getAllUsers = async (): Promise<any[]> => {
+export const getAllUsers = async (): Promise<any> => {
         try {
             //Search All users
             return await userModel.find({})  ;         
