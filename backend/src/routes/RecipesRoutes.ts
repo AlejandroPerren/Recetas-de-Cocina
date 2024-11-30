@@ -38,16 +38,15 @@ recipesRouter
 
     .post(jsonParser, async (req: Request, res: Response) => {
         try {
+            //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
-            const userid = req.params.id
-            if (!title || !description || !ingredients || !steps || !cookingTime || !type) {
-                return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-            }
-    
+            //userId by params
+            const userid = "6748e901c4fc8033a37f1626";
+
             if (!Array.isArray(ingredients) || !Array.isArray(steps)) {
-                return res.status(400).json({ error: 'Ingredientes y pasos deben ser arreglos.' });
+                res.status(400).send({ error: 'Ingredientes y pasos deben ser arreglos.' });
             }
-    
+
             const newRecipe: IRecipes = {
                 title,
                 description,
@@ -56,14 +55,15 @@ recipesRouter
                 cookingTime,
                 type,
                 image,
-                createdBy: userid, 
+                createdBy: userid,
             };
-    
+            //send Response
             const response = await controller.createRecipe(newRecipe);
             res.status(201).send(response);
+
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'Error interno del servidor.' });
+            res.status(500).send({ error: 'Error interno del servidor.' });
         }
     });
 

@@ -7,6 +7,86 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"IIngredient": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"quantity": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"quantity"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"IStep": {
+				"properties": {
+					"stepNumber": {
+						"type": "number",
+						"format": "double"
+					},
+					"instruction": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"stepNumber",
+					"instruction"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"IRecipes": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"ingredients": {
+						"items": {
+							"$ref": "#/components/schemas/IIngredient"
+						},
+						"type": "array"
+					},
+					"steps": {
+						"items": {
+							"$ref": "#/components/schemas/IStep"
+						},
+						"type": "array"
+					},
+					"cookingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"type": {
+						"type": "string"
+					},
+					"image": {
+						"type": "string"
+					},
+					"createdBy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"description",
+					"ingredients",
+					"steps",
+					"cookingTime",
+					"type",
+					"image",
+					"createdBy"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
 			"IUser": {
 				"properties": {
 					"name": {
@@ -82,12 +162,12 @@
 				"parameters": []
 			}
 		},
-		"/api/auth/register": {
+		"/api/recipes/recipes": {
 			"post": {
-				"operationId": "RegisterUser",
+				"operationId": "CreateRecipe",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "MSG recipes result, if result = Successfull, save recipe",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -95,8 +175,9 @@
 						}
 					}
 				},
+				"description": "Endpoint to Create recipes from the \"Recipes\" collection in the DB.",
 				"tags": [
-					"AuthController"
+					"RecipesController"
 				],
 				"security": [],
 				"parameters": [],
@@ -105,7 +186,40 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IUser"
+								"$ref": "#/components/schemas/IRecipes"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/auth/register": {
+			"post": {
+				"operationId": "RegisterUser",
+				"responses": {
+					"200": {
+						"description": "MSG User result, if result = Successfull, save User",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"description": "Endpoint to Create User from the \"User\" collection in the DB.",
+				"tags": [
+					"AuthController"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "information body",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUser",
+								"description": "information body"
 							}
 						}
 					}
