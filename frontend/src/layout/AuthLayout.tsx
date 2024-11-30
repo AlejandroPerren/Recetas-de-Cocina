@@ -1,7 +1,6 @@
 import { Box } from "@mui/material"
 import Container from '@mui/material/Container';
-import { Outlet, RouterProvider } from "react-router-dom";
-import router from "../routes/routes";
+import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (
@@ -14,6 +13,7 @@ const AuthLayout = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: "grey"
         }}
       >
         <Box

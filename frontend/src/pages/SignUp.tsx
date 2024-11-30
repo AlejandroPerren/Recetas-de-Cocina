@@ -1,24 +1,12 @@
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { useForm, Controller, useWatch } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { ISignUp } from '../models/AuthModel';
-
 import { SignUp } from '../network/fetchApiServices';
 import { useState } from 'react';
 
-// Yup Validation
-const schema = yup.object().shape({
-  name: yup.string().required('El nombre es obligatorio'),
-  email: yup
-    .string()
-    .email('Debe ser un correo válido')
-    .required('El correo es obligatorio'),
-  password: yup
-    .string()
-    .min(6, 'La contraseña debe tener al menos 6 caracteres')
-    .required('La contraseña es obligatoria'),
-});
+//Import Schema
+import { SignUpSchema } from '../yupSchemas/yupSchemas';
 
 const SignUpForm = () => {
   // React Hook Form Config
@@ -29,7 +17,7 @@ const SignUpForm = () => {
     reset,
     watch, 
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(SignUpSchema),
   });
 
   const [serverError, setServerError] = useState<string | null>(null);
