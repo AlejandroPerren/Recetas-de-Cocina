@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
 // Middleware de validación de datos
-import { validateRegister } from "../middlewares/validateBody.middleware";
+import { validateLogin, validateRegister } from "../middlewares/validateBody.middleware";
 
 // Controlador
 import { AuthController } from "../controller/AuthController";
@@ -27,5 +27,16 @@ authRouter.route('/register')
             res.status(500).send({ message: "Error al registrar el usuario", error });
         }
     });
+
+//Login
+authRouter.route('/login').post(jsonParser, validateLogin, async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+        const response = await controller.login({ email, password });
+        res.status(200).send(response);
+    } catch (error) {
+        res.status(500).send({ message: "Error al iniciar sesión", error });
+    }
+});
 
 export default authRouter;

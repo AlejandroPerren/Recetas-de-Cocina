@@ -1,19 +1,26 @@
 import { Body, Post, Route, Tags } from "tsoa";
 import { IUser } from "../domain/interfaces/IUser.interface";
-import { registerUser } from "../domain/orm/Auth.orm";
+import { login, registerUser } from "../domain/orm/Auth.orm";
 import { LogError, LogSuccess } from "../utils/logger";
 
+
+import dotenv from "dotenv"
+dotenv.config();
+
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 import { IAuth } from "../domain/interfaces/IUser.interface";
+const TOKEN_KEY: any = process.env.TOKEN_JSON_KEY;
+
 // Controlador de autenticación
 @Route("/api/auth")
 @Tags("AuthController")
 export class AuthController {
 
     /**
-     * Endpoint para registrar un nuevo usuario.
-     * @param user Información del usuario a registrar.
-     * @returns Mensaje con el resultado de la operación.
+     * Endpoint for register New User to DB.
+     * @param user data for register.
+     * @returns msg whit result.
      */
     @Post("/register")
     public async registerUser(@Body() user: IUser): Promise<any> {
@@ -28,7 +35,7 @@ export class AuthController {
         LogSuccess(`[/api/auth/register] Registrando nuevo usuario: ${user.email}`);
 
         try {
-            // Llamamos al ORM para registrar al usuario
+
             const response = await registerUser(user);
             return { message: `Usuario creado exitosamente: ${user.name}`, data: response };
         } catch (error) {
@@ -38,7 +45,35 @@ export class AuthController {
     }
 
     @Post("/login")
-    public async login(@Body() auth: IAuth): Promise<any>{
-        
+    public async login(@Body() auth: IAuth): Promise<any> {
+        try {
+            const user = await login(auth);
+
+            if (!user) {
+                return { message: "Usuario no encontrado" };
+            }
+
+            const validPassword = bcrypt.compareSync(auth.password, user.password);
+
+            if (!validPassword) {
+                return { message: "Contraseña incorrecta" };
+            }
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email },
+                TOKEN_KEY,
+                { expiresIn: "1h" }
+            );
+
+            LogSuccess(`[/api/auth/login] Usuario logeado: ${user.email}`);
+            return {
+                message: "Login exitoso",
+                token,
+                user: { id: user.id, email: user.email, name: user.name },
+            };
+        } catch (error) {
+            LogError(`[LOGIN ERROR]: ${error}`);
+            return { message: "Error al iniciar sesión", error };
+        }
     }
 }

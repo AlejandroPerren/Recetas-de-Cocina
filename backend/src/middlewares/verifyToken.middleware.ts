@@ -1,42 +1,42 @@
-
-import jwt from "jsonwebtoken"
-
-import { Request, Response, Nextfunction } from "express"
-
-import dotenv from "dotenv"
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const KeyToken: any = process.env.TOKEN_JSON_KEY;
+const KeyToken: string | undefined = process.env.TOKEN_JSON_KEY;
+
+if (!KeyToken) {
+    throw new Error("TOKEN_JSON_KEY is not defined in environment variables");
+}
 
 /**
- * 
+ * Middleware to verify the JWT in the request header.
  * @param {Request} req Original request previous middleware of verification JWT
  * @param {Response} res Response to verification of JWT
  * @param {NextFunction} next Next function to be executed
  * @returns Errors of verification or next execution
  */
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+    // Check HEADER from Request for 'x-access-token'
+    const jwToken: any = req.headers['x-asccess-token'];
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction){
-    //Check HEADER from Request for 'x-access-token'
-    const jwToken: any = req.headers('x-acces-token');
-
-    if (jwToken) {
+    if (!jwToken) {
         return res.status(403).send({
             authentication: 'Missing JWT in request',
-            message: 'Not autorised to consume this endpoint'
-        })
+            message: 'Not authorized to consume this endpoint'
+        });
     }
 
     jwt.verify(jwToken, KeyToken, (err: any, decoded: any) => {
         if (err) {
             return res.status(403).send({
-                authentication: 'JWT verification Failed',
+                authentication: 'JWT verification failed',
                 message: 'Failed to verify JWT in request'
-            })
+            });
         }
-    })
-
-    //Execute Next Function => Protected Route
-    next();
-}
+        // Attach the decoded token to the request object for further use
+        req.body.user = decoded;
+        next();
+    });
+};

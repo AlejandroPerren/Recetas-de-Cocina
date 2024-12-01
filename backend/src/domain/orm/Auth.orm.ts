@@ -1,5 +1,5 @@
 import { userEntity } from "../entities/User.entity";
-import { IUser } from "../interfaces/IUser.interface";
+import { IAuth, IUser } from "../interfaces/IUser.interface";
 import { LogError } from "../../utils/logger";
 
 // instance of entity 
@@ -13,5 +13,14 @@ export const registerUser = async (user: IUser): Promise<any | undefined> => {
     } catch (error) {
         LogError(`[ORM ERROR]: Creando usuario ${error}`);
         throw new Error("Error al registrar usuario en la base de datos.");
+    }
+}
+
+export const login = async(auth: IAuth): Promise<any | undefined> =>{
+    try {
+        return await userModel.findOne({email: auth.email});
+    } catch (error) {
+        LogError(`[ORM ERROR]: Logeando usuario ${error}`);
+        throw new Error("Error al Buscar un Usuario usuario en la base de datos.");
     }
 }

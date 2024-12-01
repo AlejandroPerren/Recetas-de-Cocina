@@ -106,6 +106,22 @@
 				],
 				"type": "object",
 				"additionalProperties": true
+			},
+			"IAuth": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": true
 			}
 		},
 		"securitySchemes": {}
@@ -198,7 +214,7 @@
 				"operationId": "RegisterUser",
 				"responses": {
 					"200": {
-						"description": "MSG User result, if result = Successfull, save User",
+						"description": "msg whit result.",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -206,20 +222,50 @@
 						}
 					}
 				},
-				"description": "Endpoint to Create User from the \"User\" collection in the DB.",
+				"description": "Endpoint for register New User to DB.",
 				"tags": [
 					"AuthController"
 				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
-					"description": "information body",
+					"description": "data for register.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/IUser",
-								"description": "information body"
+								"description": "data for register."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"AuthController"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAuth"
 							}
 						}
 					}
