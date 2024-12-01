@@ -14,6 +14,7 @@ const recipesRouter = express.Router();
 const controller: RecipesController = new RecipesController();
 
 import bodyParser from "body-parser";
+import { validateNewRecipe } from "../middlewares/validateBody.middleware";
 
 // Middleware
 const jsonParser = bodyParser.json();
@@ -36,16 +37,12 @@ recipesRouter
             }
         })
 
-    .post(jsonParser, async (req: Request, res: Response) => {
+    .post(jsonParser,validateNewRecipe, async (req: Request, res: Response) => {
         try {
             //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
             //userId by params
             const userid = "6748e901c4fc8033a37f1626";
-
-            if (!Array.isArray(ingredients) || !Array.isArray(steps)) {
-                res.status(400).send({ error: 'Ingredientes y pasos deben ser arreglos.' });
-            }
 
             const newRecipe: IRecipes = {
                 title,

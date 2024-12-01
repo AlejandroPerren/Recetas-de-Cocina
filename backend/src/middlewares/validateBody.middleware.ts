@@ -41,13 +41,52 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
     }
 };
 
-// Middleware for validate Create New Recipe
+
+// Esquema para validar la creación de una nueva receta
 const newRecipeSchema = yup.object().shape({
-    title: yup.string().required("Title is Required"),
-
-})
-
-export const validateNewRecipe = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+    title: yup.string().required("Title is required"),
+    description: yup.string().required("Description is required"),
+    ingredients: yup
+        .array()
+        .of(
+            yup.object().shape({
+                name: yup.string().required("Ingredient name is required"),
+                quantity: yup.string().required("Ingredient quantity is required"),
+            })
+        )
+        .min(1, "At least one ingredient is required")
+        .required("Ingredients are required"),
+    steps: yup
+        .array()
+        .of(
+            yup.object().shape({
+                stepNumber: yup
+                    .number()
+                    .min(1, "Step number must be at least 1")
+                    .required("Step number is required"),
+                instruction: yup
+                    .string()
+                    .required("Step instruction is required"),
+            })
+        )
+        .min(1, "At least one step is required")
+        .required("Steps are required"),
+    cookingTime: yup
+        .number()
+        .min(1, "Cooking time must be at least 1 minute")
+        .required("Cooking time is required"),
+    type: yup.string().required("Type is required"),
+    image: yup
+        .string()
+        .url("Image must be a valid URL")
+        .required("Image is required"),
+});
+// Middleware para validar la creación de recetas
+export const validateNewRecipe = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<any> => {
     try {
         await newRecipeSchema.validate(req.body, { abortEarly: false });
         next();
