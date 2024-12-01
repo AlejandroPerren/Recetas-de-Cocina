@@ -7,6 +7,10 @@ const SummaryApi = {
     SignUp : {
         url: `${backendDomain}/auth/register`,
         method: `post`
+    },
+    Login: {
+        url: `${backendDomain}/auth/login`,
+        method: `post`
     }
 }
 

@@ -39,4 +39,5 @@ authRouter.route('/login').post(jsonParser, validateLogin, async (req: Request, 
     }
 });
 
+
 export default authRouter;

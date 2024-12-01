@@ -6,7 +6,7 @@ import { SignUp } from '../network/fetchApiServices';
 import { useState } from 'react';
 
 //Import Schema
-import { SignUpSchema } from '../yupSchemas/yupSchemas';
+import { SignUpSchema } from '../yupSchemas/Schemas';
 
 const SignUpForm = () => {
   // React Hook Form Config
@@ -27,9 +27,10 @@ const SignUpForm = () => {
   //Send of Form Config
   const onSubmit = async (data: ISignUp) => {
     try {
-      await SignUp(data);
-      reset(); 
       setServerError(null); 
+      await SignUp(data); 
+      reset(); 
+      alert("Inicio de sesión exitoso");
     } catch (error) {
       setServerError(`Ocurrió un error al registrarte. Inténtalo de nuevo: ${error}` );
     }

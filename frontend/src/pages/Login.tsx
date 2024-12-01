@@ -1,37 +1,39 @@
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SignUp } from '../network/fetchApiServices';
+import { Login } from '../network/fetchApiServices';
 import { useState } from 'react';
 
 
 //Import Schema Yup
-import { LoginSchema } from '../yupSchemas/yupSchemas';
+import { LoginSchema } from '../yupSchemas/Schemas';
+import { ILogin } from '../models/AuthModel';
 
-const Login = () => {
+const LoginForm = () => {
   // React Hook Form Config
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-    watch, 
+    watch,
   } = useForm({
     resolver: yupResolver(LoginSchema),
   });
 
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const formData = watch(); 
+  const formData = watch();
 
   //Send of Form Config
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (auth: ILogin) => {
     try {
-      await SignUp(data);
-      reset(); 
       setServerError(null); 
+      await Login(auth); 
+      reset(); 
+      alert("Inicio de sesión exitoso");
     } catch (error) {
-      setServerError(`Ocurrió un error al registrarte. Inténtalo de nuevo: ${error}` );
+      setServerError(`Ocurrió un error al registrarte. Inténtalo de nuevo: ${error}`);
     }
   };
   return (
@@ -42,25 +44,6 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" flexDirection="column" gap={3}>
 
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Box>
-                <TextField
-                  {...field}
-                  label="Nombre"
-                  variant="outlined"
-                  error={!!errors.name}
-                  fullWidth
-                />
-                <Typography color="error" variant="body2">
-                  {errors.name?.message}
-                </Typography>
-              </Box>
-            )}
-          />
 
           <Controller
             name="email"
@@ -127,4 +110,4 @@ const Login = () => {
 
 }
 
-export default Login
+export default LoginForm
