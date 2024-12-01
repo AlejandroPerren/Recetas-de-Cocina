@@ -1,52 +1,31 @@
 import express, { Request, Response } from "express";
-
 import bodyParser from "body-parser";
 
-//Security Auth
-import bcrypt from "bcrypt";
+// Middleware de validación de datos
+import { validateRegister } from "../middlewares/validateBody.middleware";
 
-//Interface User
-import { IUser } from "../domain/interfaces/IUser.interface";
-
-//Controller
+// Controlador
 import { AuthController } from "../controller/AuthController";
 
-//config Router
+// Configuración del Router
 const authRouter = express.Router();
 
-// Middleware
+// Middleware para procesar JSON
 const jsonParser = bodyParser.json();
 
-// Instantiate the controller
+// Instancia del controlador
 const controller: AuthController = new AuthController();
 
-
-// TODO: express-validator
-//Route of Register
+// Ruta de registro
 authRouter.route('/register')
-    .post(jsonParser, async (req: Request, res: Response) => {
-        //Body of Request recibe name, email, password
-        const { name, email, password } = req.body;
-
-        if (name && email && password) {
-            //Encrypt password
-            const hashPassword = bcrypt.hashSync(password, 10);
-
-            //integrate interface to body
-            const newUser: IUser = {
-                name,
-                email,
-                password: hashPassword
-            };
-
-            //send Response
-            const response = await controller.registerUser(newUser);
+    .post(jsonParser, validateRegister, async (req: Request, res: Response) => {
+        try {
+            const { name, email, password } = req.body;
+            const response = await controller.registerUser({ name, email, password });
             res.status(200).send(response);
-        } else {
-            res.status(400).send({ message: "Invalid Input Data" });
+        } catch (error) {
+            res.status(500).send({ message: "Error al registrar el usuario", error });
         }
     });
-
-
 
 export default authRouter;

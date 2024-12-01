@@ -1,37 +1,44 @@
-//Documentation of tsoa MSG
 import { Body, Post, Route, Tags } from "tsoa";
-
-//ORM IMPORT
-import { registerUser } from "../domain/orm/Auth.orm";
-
-//Interface of User body import
 import { IUser } from "../domain/interfaces/IUser.interface";
-
-//MSG 
+import { registerUser } from "../domain/orm/Auth.orm";
 import { LogError, LogSuccess } from "../utils/logger";
 
-
-//Controllers handles the base logic of the code
-
+import bcrypt from "bcrypt"
+import { IAuth } from "../domain/interfaces/IUser.interface";
+// Controlador de autenticación
 @Route("/api/auth")
 @Tags("AuthController")
 export class AuthController {
-      /**
-     * Endpoint to Create User from the "User" collection in the DB.
-     * @param  user information body
-     * @returns MSG User result, if result = Successfull, save User 
+
+    /**
+     * Endpoint para registrar un nuevo usuario.
+     * @param user Información del usuario a registrar.
+     * @returns Mensaje con el resultado de la operación.
      */
     @Post("/register")
     public async registerUser(@Body() user: IUser): Promise<any> {
-        if (user) {
-            LogSuccess(`[/api/auth/register] Registering new user: ${user.email}`)
-            try {
-                const response = await registerUser(user);
-                return { message: `User created successfully: ${user.name}`, data: response };
-            } catch (error) {
-                LogError(`[REGISTER ERROR]: ${error}`);
-                return { message: "Error registering user.", error };
-            }
+        if (!user) {
+            return { message: "Datos inválidos" };
         }
+
+        //encrypt password 
+        const hashedPassword = await bcrypt.hashSync(user.password, 10)
+
+        user.password = hashedPassword;
+        LogSuccess(`[/api/auth/register] Registrando nuevo usuario: ${user.email}`);
+
+        try {
+            // Llamamos al ORM para registrar al usuario
+            const response = await registerUser(user);
+            return { message: `Usuario creado exitosamente: ${user.name}`, data: response };
+        } catch (error) {
+            LogError(`[REGISTER ERROR]: ${error}`);
+            return { message: "Error registrando el usuario.", error };
+        }
+    }
+
+    @Post("/login")
+    public async login(@Body() auth: IAuth): Promise<any>{
+        
     }
 }
