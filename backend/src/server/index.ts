@@ -14,13 +14,14 @@ import helmet from "helmet";
 //Root Router
 import router from "../routes"
 
-
+//morgan 
+import morgan from "morgan"
 
 //express Config
 const server: Express = express();
 server.use(express.json({limit: '50mb'}));
 server.use(express.urlencoded({extended: true, limit: '50m'}))
-
+server.use(morgan("dev"));
 //ENV CONFIG 
 dotenv.config()
 

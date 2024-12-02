@@ -22,22 +22,29 @@ authRouter.route('/register')
         try {
             const { name, email, password } = req.body;
             const response = await controller.registerUser({ name, email, password });
-            res.status(200).send(response);
+            res.status(200).json(response);
         } catch (error) {
-            res.status(500).send({ message: "Error al registrar el usuario", error });
+            res.status(500).json({ message: "Error al registrar el usuario", error });
         }
     });
 
 //Login
-authRouter.route('/login').post(jsonParser, validateLogin, async (req: Request, res: Response) => {
+authRouter.route('/login')
+    .post(jsonParser, validateLogin, async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
         const response = await controller.login({ email, password });
-        res.status(200).send(response);
+
+        // Aplica explícitamente el código de estado y envía la respuesta
+        if (response && response.status) {
+            return res.status(response.status).json(response);
+        }
+
+        // Si no hay un código de estado en la respuesta, asume un error interno
+        res.status(500).json({ message: "Respuesta inválida del controlador" });
     } catch (error) {
-        res.status(500).send({ message: "Error al iniciar sesión", error });
+        res.status(500).json({ message: "Error inesperado en la solicitud", error });
     }
 });
-
 
 export default authRouter;

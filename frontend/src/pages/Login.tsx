@@ -30,10 +30,10 @@ const LoginForm = () => {
     try {
       setServerError(null); 
       await Login(auth); 
-      reset(); 
       alert("Inicio de sesión exitoso");
-    } catch (error) {
-      setServerError(`Ocurrió un error al registrarte. Inténtalo de nuevo: ${error}`);
+      reset(); 
+    } catch (error: any) {
+      setServerError(error.message);
     }
   };
   return (

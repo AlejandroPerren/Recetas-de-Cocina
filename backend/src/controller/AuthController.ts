@@ -50,13 +50,19 @@ export class AuthController {
             const user = await login(auth);
 
             if (!user) {
-                return { message: "Usuario no encontrado" };
+                return {
+                    status: 404,
+                    message: "Usuario no encontrado",
+                };
             }
 
             const validPassword = bcrypt.compareSync(auth.password, user.password);
 
             if (!validPassword) {
-                return { message: "Contraseña incorrecta" };
+                return {
+                    status: 401,
+                    message: "Contraseña incorrecta",
+                };
             }
 
             const token = jwt.sign(
@@ -67,13 +73,18 @@ export class AuthController {
 
             LogSuccess(`[/api/auth/login] Usuario logeado: ${user.email}`);
             return {
+                status: 200,
                 message: "Login exitoso",
                 token,
                 user: { id: user.id, email: user.email, name: user.name },
             };
         } catch (error) {
             LogError(`[LOGIN ERROR]: ${error}`);
-            return { message: "Error al iniciar sesión", error };
+            return {
+                status: 500,
+                message: "Error al iniciar sesión",
+                error,
+            };
         }
     }
 }
