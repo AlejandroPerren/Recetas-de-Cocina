@@ -15,6 +15,10 @@ const SummaryApi = {
     GetAllRecipes: {
         url: `${backendDomain}/recipes`,
         method: 'get'
+    },
+    CreateNewRecipe:{
+        url: `${backendDomain}/recipes`,
+        method: `post`
     }
 }
 

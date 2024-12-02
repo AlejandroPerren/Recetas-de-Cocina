@@ -1,6 +1,7 @@
 import SummaryApi from "../common/SummaryApi";
 import { ApiError, ConflictError } from "../errors/http_errors";
 import { ILogin, ISignUp } from "../models/AuthModel";
+import { IRecipes } from "../models/ServicesModel";
 
 //Reusable function body for requests
 async function fetchData(input: RequestInfo, init?: RequestInit) {
@@ -42,13 +43,20 @@ export async function GetAllRecipes(): Promise<any> {
       method: SummaryApi.GetAllRecipes.method,
   });
 
-  // Verifica si `data.message` es un array
   if (Array.isArray(data.message)) {
-      return data.message; // Devuelve el array de recetas.
+      return data.message;
   }
 
   throw new Error("La estructura de la respuesta del servidor no es válida.");
 }
-
+export async function CreateNewRecipe(recipe: IRecipes): Promise<any> {
+  return fetchData(SummaryApi.CreateNewRecipe.url, {
+      method: SummaryApi.CreateNewRecipe.method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipe),
+    });
+}
 
 

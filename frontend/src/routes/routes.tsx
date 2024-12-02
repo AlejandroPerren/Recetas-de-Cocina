@@ -5,6 +5,7 @@ import LoginForm from '../pages/Login';
 import UsersLayout from '../layout/UsersLayout';
 import HomeLayout from '../layout/HomeLayout';
 import Home from '../pages/Home';
+import FormRecipe from '../pages/CreateRecipeForm';
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path : 'home',
                 element: <Home/>
+            },
+            {
+                path: 'createRecipe',
+                element: <FormRecipe/>
             }
         ]
     },
