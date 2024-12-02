@@ -16,13 +16,19 @@ const jsonParser = bodyParser.json();
 // Instancia del controlador
 const controller: AuthController = new AuthController();
 
+// TODO: Crear un cuerpo correcto para las peticiones y sus errores
+
 // Ruta de registro
 authRouter.route('/register')
-    .post(jsonParser, validateRegister, async (req: Request, res: Response) => {
+    .post(jsonParser, validateRegister, async (req: Request, res: Response): Promise<any> => {
+        
         try {
             const { name, email, password } = req.body;
             const response = await controller.registerUser({ name, email, password });
-            res.status(200).json(response);
+            if (response && response.status) {
+                return res.status(response.status).json(response);
+            }
+            res.status(500).json({ message: "Respuesta inválida del controlador" });
         } catch (error) {
             res.status(500).json({ message: "Error al registrar el usuario", error });
         }
@@ -30,7 +36,7 @@ authRouter.route('/register')
 
 //Login
 authRouter.route('/login')
-    .post(jsonParser, validateLogin, async (req: Request, res: Response) => {
+    .post(jsonParser, validateLogin, async (req: Request, res: Response): Promise<any> => {
     try {
     const { email, password } = req.body;
         const response = await controller.login({ email, password });

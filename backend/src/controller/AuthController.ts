@@ -37,10 +37,16 @@ export class AuthController {
         try {
 
             const response = await registerUser(user);
-            return { message: `Usuario creado exitosamente: ${user.name}`, data: response };
+            return { 
+                status: 200,
+                message: `Usuario creado exitosamente: ${user.name}`, 
+                data: response };
         } catch (error) {
-            LogError(`[REGISTER ERROR]: ${error}`);
-            return { message: "Error registrando el usuario.", error };
+            return {
+                status: 500,
+                message: "Error al iniciar sesión",
+                error,
+            };
         }
     }
 
