@@ -6,7 +6,7 @@ import { getAllUsers } from "../domain/orm/Users.orm";
 
 
 import { IUserController } from "./interfaces";
-import { LogSuccess } from "../utils/logger";
+import { LogError, LogSuccess } from "../utils/logger";
 
 
 @Route("/api/users")
@@ -18,8 +18,19 @@ export class UserController implements IUserController {
      */
     @Get("/")
     public async getAllUsers(): Promise<any> {
-        LogSuccess(`[/api/users] Get Users Request`)
-        return await getAllUsers();
+        try {
+            LogSuccess(`[/api/users] Get Users Request`)
+            const response = await getAllUsers();
+            return{
+                status: 200,
+                message: response
+            }
+        } catch (error) {
+            LogError(`[/api/users]Controller Error`)
+            return{status: 500,
+                message: "Error Get Users",
+                error,}   
+        }
     }
 
 

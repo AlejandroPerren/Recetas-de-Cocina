@@ -11,6 +11,10 @@ const SummaryApi = {
     Login: {
         url: `${backendDomain}/auth/login`,
         method: `post`
+    },
+    GetAllRecipes: {
+        url: `${backendDomain}/recipes`,
+        method: 'get'
     }
 }
 

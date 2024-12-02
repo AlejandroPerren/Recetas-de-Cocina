@@ -1,10 +1,11 @@
 import React from 'react'
-import RecipeReviewCard from '../components/RecipeReviewCard'
+import AllRecipes from '../components/AllRecipes'
+
 
 const Home = () => {
   return (
     <div>
-      <RecipeReviewCard/>
+      <AllRecipes/>
     </div>
   )
 }

@@ -35,4 +35,20 @@ export async function Login(auth: ILogin): Promise<any> {
       });
 }
 
+//Recipes
+//All Recipes
+export async function GetAllRecipes(): Promise<any> {
+  const data = await fetchData(SummaryApi.GetAllRecipes.url, {
+      method: SummaryApi.GetAllRecipes.method,
+  });
+
+  // Verifica si `data.message` es un array
+  if (Array.isArray(data.message)) {
+      return data.message; // Devuelve el array de recetas.
+  }
+
+  throw new Error("La estructura de la respuesta del servidor no es válida.");
+}
+
+
 
