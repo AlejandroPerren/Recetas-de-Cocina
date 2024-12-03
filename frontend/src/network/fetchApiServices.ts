@@ -1,7 +1,7 @@
 import SummaryApi from "../common/SummaryApi";
-import { ApiError, ConflictError } from "../errors/http_errors";
+import { ApiError } from "../errors/http_errors";
 import { ILogin, ISignUp } from "../models/AuthModel";
-import { IRecipes } from "../models/ServicesModel";
+import { ICreateRecipe } from "../models/ServicesModel";
 
 //Reusable function body for requests
 async function fetchData(input: RequestInfo, init?: RequestInit) {
@@ -49,7 +49,7 @@ export async function GetAllRecipes(): Promise<any> {
 
   throw new Error("La estructura de la respuesta del servidor no es válida.");
 }
-export async function CreateNewRecipe(recipe: IRecipes): Promise<any> {
+export async function CreateNewRecipe(recipe: ICreateRecipe): Promise<any> {
   return fetchData(SummaryApi.CreateNewRecipe.url, {
       method: SummaryApi.CreateNewRecipe.method,
       headers: {

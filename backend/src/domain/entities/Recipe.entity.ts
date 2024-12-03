@@ -15,12 +15,14 @@ export const recipeEntity = () => {
                 name: { type: String, required: true },
                 quantity: { type: String, required: true },
             },
+            { _id: false }
         ],
         steps: [
             {
                 stepNumber: Number,
                 instruction: { type: String, required: true },
             },
+            { _id: false }
         ],
         cookingTime: {
             type: Number,
