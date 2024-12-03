@@ -39,11 +39,12 @@ recipesRouter
                 });
             }
         })
-
     .post(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
         try {
             //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
+            //id by query
+            const _id = "674b21d71404dd30eb87a061" as string
             //userId by params
             const userid = "6748e901c4fc8033a37f1626";
 
@@ -58,7 +59,7 @@ recipesRouter
                 createdBy: userid,
             };
             //send Response
-            const response = await controller.createRecipe(newRecipe);
+            const response = await controller.updateRecipe(_id,newRecipe);
             if (response && response.status) {
                 return res.status(response.status).json(response);
             }
@@ -70,8 +71,37 @@ recipesRouter
             console.error(error);
             res.status(500).send({ error: 'Error interno del servidor.' });
         }
-    });
+    })
+    .put(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
+        try {
+            //body of Request
+            const { newTitle, newDescription, newIngredients, newSteps, newTookingTime, newType, newTmage } = req.body;
+            //userId by params
+            const userid = "6748e901c4fc8033a37f1626";
 
+            const newRecipe: IRecipes = {
+                title : newTitle,
+                description : newDescription,
+                ingredients : newIngredients,
+                steps : newSteps,
+                cookingTime : newTookingTime,
+                type : newType,
+                image : newTmage,
+                updateBy: userid,
+            };
+            //send Response
+            const response = await controller.createRecipe(newRecipe);
+            if (response && response.status) {
+                return res.status(response.status).json(response);
+            }
 
+            // Si no hay un código de estado en la respuesta, asume un error interno
+            res.status(500).json({ message: "Respuesta inválida del controlador" });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: 'Error interno del servidor.' });  
+        }
+    })
 
 export default recipesRouter;

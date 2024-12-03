@@ -9,6 +9,7 @@ interface IStep {
 }
 
 export interface IRecipes {
+    _id?: string,
     title: string;
     description: string;
     ingredients: IIngredient[]; 
@@ -16,5 +17,6 @@ export interface IRecipes {
     cookingTime: number;
     type: string; 
     image: string;
-    createdBy: string;
+    createdBy?: string;
+    updateBy?: string,
 }

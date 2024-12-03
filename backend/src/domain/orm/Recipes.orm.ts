@@ -31,3 +31,19 @@ export const createRecipe = async(recipe: IRecipes): Promise<any | undefined> =>
         LogError(`[ORM ERROR]: Creating Recipes ${error}`)
     }
 }
+
+export const updateRecipe = async(recipe: IRecipes): Promise<any | undefined> => {
+    try{
+        return await recipeModel.findOne({_id: recipe._id});
+    }catch(error){
+        LogError(`[ORM ERROR]: Edite Recipes ${error}`);
+    }
+}
+
+export const deleteRecipe = async(recipe: IRecipes): Promise<any | undefined> => {
+ try {
+    return await recipeModel.deleteOne({_id: recipe._id})
+ } catch (error) {
+    LogError(`[ORM ERROR]: Delete Recipes ${error}`);
+ }
+}

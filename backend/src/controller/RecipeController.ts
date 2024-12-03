@@ -1,7 +1,7 @@
-import { Body, Get, Post, Route, Tags } from "tsoa";
+import { Body, Delete, Get, Post, Put, Queries, Query, Route, Tags } from "tsoa";
 
 //ORM - Recipes Collection
-import { getAllRecipes, createRecipe } from "../domain/orm/Recipes.orm";
+import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe } from "../domain/orm/Recipes.orm";
 import { IRecipeController } from "./interfaces";
 import { LogError, LogSuccess } from "../utils/logger";
 import { IRecipes } from "../domain/interfaces/IRecipe.interface";
@@ -58,4 +58,33 @@ export class RecipesController implements IRecipeController {
         }
     }
 
+    @Put("/recipes:recipeId")
+    public async updateRecipe(@Body() recipe: IRecipes, @Query() _id?: any): Promise<any>{
+        try {   
+            LogSuccess(`[/api/recipes:recipeId] Update Recipes Request by ID: ${_id}`);
+            const response = await updateRecipe(_id) 
+            return{
+                status: 200,
+                message: "Actualizado Correctamente",
+                data: response
+            };
+        } catch (error) {
+            return{
+            status: 500,
+            message: "Error al Actualizar Receta",
+            error,
+        }
+        }
+    }
+    @Delete("/")
+    public async deleteUser(@Query() _id?: any): Promise<any>{
+        if(_id){
+            LogSuccess(`[/api/recipes] Delete Recipe by id: ${_id}`);
+            await deleteRecipe(_id);
+            return {
+                status: 200,
+                message: "Borrado Correctamente"
+            }
+        }
+    }
 }
