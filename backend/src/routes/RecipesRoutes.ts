@@ -48,7 +48,7 @@ recipesRouter
             //id by query
             const userId = "674b21d71404dd30eb87a061" as string
             //userId by params
-            
+
 
             const newRecipe: IRecipes = {
                 title,
@@ -78,11 +78,34 @@ recipesRouter
 //Routes Recipes whit id params
 recipesRouter
     .route("/:recipeId")
+    .get(async (req: Request, res: Response): Promise<any> => {
+        try {
+            const recipeId = req.params.recipeId;
+            if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+                return res.status(400).json({
+                    status: 400,
+                    message: "Invalid Recipe ID format",
+                });
+            }
+            const response = await controller.getRecipeById(recipeId);
+            if (response && response.status) {
+                return res.status(response.status).json(response);
+            }
+
+            res.status(500).json({ message: "Invalid response for controller" });
+        } catch (error) {
+            LogError(`[GET /api/recipes] Error: ${error}`)
+            res.status(500).send({
+                message: "Error Retrieving recipe",
+                error: error,
+            })
+        }
+    })
     .put(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
         try {
             const recipeId = req.params.recipeId;
             const userId = "6748e901c4fc8033a37f1626";
-            
+
             if (!mongoose.Types.ObjectId.isValid(recipeId)) {
                 return res.status(400).json({
                     status: 400,

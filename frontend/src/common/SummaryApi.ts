@@ -19,7 +19,11 @@ const SummaryApi = {
     CreateNewRecipe:{
         url: `${backendDomain}/recipes`,
         method: `post`
-    }
+    },
+    UpdateRecipe:{
+        url: `${backendDomain}/recipes`,
+        method: `put`
+    },
 }
 
 export default SummaryApi;

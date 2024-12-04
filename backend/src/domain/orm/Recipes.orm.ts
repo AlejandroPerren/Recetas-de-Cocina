@@ -24,6 +24,14 @@ export const getAllRecipes = async (): Promise<any> =>{
     }
 }
 
+export const getRecipeById = async(_id: string): Promise<any> =>{
+    try {
+        return await recipeModel.findById({_id})
+    } catch (error) {
+        LogError(`[ORM ERROR]: Getting Recipe: ${error}`);
+    }
+}
+
 export const createRecipe = async(recipe: IRecipes): Promise<any | undefined> =>{
     try {
         //Create / Insert new Recipe

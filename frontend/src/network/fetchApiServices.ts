@@ -49,6 +49,12 @@ export async function GetAllRecipes(): Promise<any> {
 
   throw new Error("La estructura de la respuesta del servidor no es válida.");
 }
+export async function GetRecipeById(id:any) {
+  return await fetchData(`${SummaryApi.GetAllRecipes.url}/${id}`, {
+    method: SummaryApi.GetAllRecipes.method,
+});
+}
+
 export async function CreateNewRecipe(recipe: ICreateRecipe): Promise<any> {
   return fetchData(SummaryApi.CreateNewRecipe.url, {
       method: SummaryApi.CreateNewRecipe.method,
@@ -59,4 +65,13 @@ export async function CreateNewRecipe(recipe: ICreateRecipe): Promise<any> {
     });
 }
 
+export async function UpdateRecipe(recipe: ICreateRecipe, id: string): Promise<any>{
+  return fetchData(`${SummaryApi.UpdateRecipe.url}/${id}`, {
+    method: SummaryApi.UpdateRecipe.method,
+    headers: {
+      "Content-Type" : "application/json",
+    },
+    body: JSON.stringify(recipe)
+  } )
+}
 

@@ -1,7 +1,7 @@
 import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
 
 //ORM - Recipes Collection
-import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe } from "../domain/orm/Recipes.orm";
+import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe, getRecipeById } from "../domain/orm/Recipes.orm";
 import { IRecipeController } from "./interfaces";
 import { LogError, LogSuccess } from "../utils/logger";
 import { IRecipes } from "../domain/interfaces/IRecipe.interface";
@@ -13,7 +13,7 @@ import { IRecipes } from "../domain/interfaces/IRecipe.interface";
 export class RecipesController implements IRecipeController {
     /**
     * Endpoint to retrieve recipes from the "Recipes" collection in the DB.
-    * @returns all users
+    * @returns all Recipes
     */
     @Get("/")
     public async getAllRecipes(): Promise<any> {
@@ -29,6 +29,29 @@ export class RecipesController implements IRecipeController {
             return {
                 status: 500,
                 message: "Error recipes Users",
+                error,
+            }
+        }
+
+    }
+       /**
+    * Endpoint to retrieve recipe from the "Recipes" collection in the DB Browser by ID.
+    * @returns One Recipe
+    */
+    @Get("/")
+    public async getRecipeById(_id: any): Promise<any> {
+        try {
+            LogSuccess(`[/api/recipes] Get Recipe Request`)
+            const response = await getRecipeById(_id);
+            return {
+                status: 200,
+                message: response
+            }
+        } catch (error) {
+            LogError(`[/api/recipes]Controller Error`)
+            return {
+                status: 500,
+                message: "Error recipe User",
                 error,
             }
         }

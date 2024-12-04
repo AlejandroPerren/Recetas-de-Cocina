@@ -18,6 +18,9 @@ export interface IRecipeController {
     // Get All Recipes
     getAllRecipes(): Promise<any>;
 
+    // Get Recipe By ID
+    getRecipeById(_id: string): Promise<any>;
+
     // Create Recipe
     createRecipe(recipe: IRecipes): Promise<any>;
 

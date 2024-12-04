@@ -18,7 +18,7 @@ const UsersLayout = () => {
   >
     <Box
       sx={{
-        width: '100%',
+        width: '90%',
         maxWidth: 900,
         bgcolor: 'white',
         boxShadow: 3,
