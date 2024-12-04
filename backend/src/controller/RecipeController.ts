@@ -1,4 +1,4 @@
-import { Body, Delete, Get, Post, Put, Queries, Query, Route, Tags } from "tsoa";
+import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
 
 //ORM - Recipes Collection
 import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe } from "../domain/orm/Recipes.orm";
@@ -20,15 +20,17 @@ export class RecipesController implements IRecipeController {
         try {
             LogSuccess(`[/api/recipes] Get Recipes Request`)
             const response = await getAllRecipes();
-            return{
+            return {
                 status: 200,
                 message: response
             }
         } catch (error) {
             LogError(`[/api/recipes]Controller Error`)
-            return{status: 500,
+            return {
+                status: 500,
                 message: "Error recipes Users",
-                error,}  
+                error,
+            }
         }
 
     }
@@ -38,47 +40,54 @@ export class RecipesController implements IRecipeController {
    */
     @Post("/recipes")
     public async createRecipe(@Body() recipe: IRecipes): Promise<any> {
-
         if (recipe) {
             LogSuccess(`[/api/recipes] Creating New Recipe: ${recipe.title}`);
             try {
                 const response = await createRecipe(recipe);
                 return {
                     status: 200,
-                    message: `Recipe created Succesfull: ${recipe.title}`,
+                    message: `Recipe created successfully: ${recipe.title}`,
                     data: response
                 };
             } catch (error) {
                 LogError(`[REGISTER ERROR]: ${error}`);
                 return {
                     status: 500,
-                    message: "Error registering user.", error
+                    message: "Error creating recipe.",
+                    error,
                 };
+            }
+        }
+    }
+
+    @Put("/recipes/:recipeId")
+    public async updateRecipe(@Body() recipe: Partial<IRecipes>, @Query() recipeId: string): Promise<any> {
+        try {
+            if (!recipeId) {
+                return{ 
+                status : 400,
+                message: "Recipe ID is required" }
+            }
+            LogSuccess(`[/api/recipes/:recipeId] Update Recipe by ID: ${recipeId}`);
+            const response = await updateRecipe(recipeId, recipe);
+            return {
+                status: 200,
+                message: "Receta actualizada correctamente",
+                data: response,
+            };
+        } catch (error) {
+            LogError(`[Controller Error] Updating Recipe: ${error}`);
+            return {
+                status: 500,
+                message: "Error al actualizar la receta",
+                error,
             };
         }
     }
 
-    @Put("/recipes:recipeId")
-    public async updateRecipe(@Body() recipe: IRecipes, @Query() _id?: any): Promise<any>{
-        try {   
-            LogSuccess(`[/api/recipes:recipeId] Update Recipes Request by ID: ${_id}`);
-            const response = await updateRecipe(_id) 
-            return{
-                status: 200,
-                message: "Actualizado Correctamente",
-                data: response
-            };
-        } catch (error) {
-            return{
-            status: 500,
-            message: "Error al Actualizar Receta",
-            error,
-        }
-        }
-    }
     @Delete("/")
-    public async deleteUser(@Query() _id?: any): Promise<any>{
-        if(_id){
+    public async deleteRecipe(@Query() _id?: any): Promise<any> {
+        if (_id) {
             LogSuccess(`[/api/recipes] Delete Recipe by id: ${_id}`);
             await deleteRecipe(_id);
             return {

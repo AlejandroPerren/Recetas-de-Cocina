@@ -14,3 +14,5 @@ Tiempo de preparación.
 Tipo de comida (desayuno, almuerzo, postre, etc.).
 Guardar recetas como favoritas por los usuarios.
 
+
+//TODO: necesito manejar mejor la logica en todos con la interface y su instancia

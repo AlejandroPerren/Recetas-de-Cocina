@@ -42,6 +42,9 @@
 			},
 			"IRecipes": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"title": {
 						"type": "string"
 					},
@@ -72,6 +75,9 @@
 					},
 					"createdBy": {
 						"type": "string"
+					},
+					"updateBy": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -81,11 +87,53 @@
 					"steps",
 					"cookingTime",
 					"type",
-					"image",
-					"createdBy"
+					"image"
 				],
 				"type": "object",
 				"additionalProperties": true
+			},
+			"Partial_IRecipes_": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"ingredients": {
+						"items": {
+							"$ref": "#/components/schemas/IIngredient"
+						},
+						"type": "array"
+					},
+					"steps": {
+						"items": {
+							"$ref": "#/components/schemas/IStep"
+						},
+						"type": "array"
+					},
+					"cookingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"type": {
+						"type": "string"
+					},
+					"image": {
+						"type": "string"
+					},
+					"createdBy": {
+						"type": "string"
+					},
+					"updateBy": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
 			},
 			"IUser": {
 				"properties": {
@@ -176,6 +224,33 @@
 				],
 				"security": [],
 				"parameters": []
+			},
+			"delete": {
+				"operationId": "DeleteRecipe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"RecipesController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/api/recipes/recipes": {
@@ -203,6 +278,45 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/IRecipes"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/recipes/recipes/{recipeId}": {
+			"put": {
+				"operationId": "UpdateRecipe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"RecipesController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "recipeId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_IRecipes_"
 							}
 						}
 					}

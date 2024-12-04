@@ -5,6 +5,7 @@ import { IRecipes } from "../interfaces/IRecipe.interface";
 //entity of recipes
 import { recipeEntity } from "../entities/Recipe.entity";
 import { LogError } from "../../utils/logger";
+import mongoose from "mongoose";
 
 /**
  * Method to obtain all Users from Collerction "users"
@@ -32,13 +33,18 @@ export const createRecipe = async(recipe: IRecipes): Promise<any | undefined> =>
     }
 }
 
-export const updateRecipe = async(recipe: IRecipes): Promise<any | undefined> => {
-    try{
-        return await recipeModel.findOne({_id: recipe._id});
-    }catch(error){
-        LogError(`[ORM ERROR]: Edite Recipes ${error}`);
+export const updateRecipe = async (_id: string, updatedData: Partial<IRecipes>): Promise<any> => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(_id)) {
+            throw new Error("Invalid Recipe ID");
+        }
+        return await recipeModel.findByIdAndUpdate(_id, updatedData, { new: true });
+    } catch (error) {
+        LogError(`[ORM ERROR]: Updating Recipe ${error}`);
+        throw error;
     }
-}
+};
+
 
 export const deleteRecipe = async(recipe: IRecipes): Promise<any | undefined> => {
  try {

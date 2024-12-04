@@ -15,10 +15,12 @@ const controller: RecipesController = new RecipesController();
 
 import bodyParser from "body-parser";
 import { validateNewRecipe } from "../middlewares/validateBody.middleware";
+import mongoose from "mongoose";
 
 // Middleware
 const jsonParser = bodyParser.json();
 
+//Routes Recipes
 recipesRouter
     .route("/")
     .get(
@@ -44,9 +46,9 @@ recipesRouter
             //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
             //id by query
-            const _id = "674b21d71404dd30eb87a061" as string
+            const userId = "674b21d71404dd30eb87a061" as string
             //userId by params
-            const userid = "6748e901c4fc8033a37f1626";
+            
 
             const newRecipe: IRecipes = {
                 title,
@@ -56,38 +58,7 @@ recipesRouter
                 cookingTime,
                 type,
                 image,
-                createdBy: userid,
-            };
-            //send Response
-            const response = await controller.updateRecipe(_id,newRecipe);
-            if (response && response.status) {
-                return res.status(response.status).json(response);
-            }
-
-            // Si no hay un código de estado en la respuesta, asume un error interno
-            res.status(500).json({ message: "Respuesta inválida del controlador" });
-
-        } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Error interno del servidor.' });
-        }
-    })
-    .put(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
-        try {
-            //body of Request
-            const { newTitle, newDescription, newIngredients, newSteps, newTookingTime, newType, newTmage } = req.body;
-            //userId by params
-            const userid = "6748e901c4fc8033a37f1626";
-
-            const newRecipe: IRecipes = {
-                title : newTitle,
-                description : newDescription,
-                ingredients : newIngredients,
-                steps : newSteps,
-                cookingTime : newTookingTime,
-                type : newType,
-                image : newTmage,
-                updateBy: userid,
+                createdBy: userId,
             };
             //send Response
             const response = await controller.createRecipe(newRecipe);
@@ -100,8 +71,44 @@ recipesRouter
 
         } catch (error) {
             console.error(error);
-            res.status(500).send({ error: 'Error interno del servidor.' });  
+            res.status(500).send({ error: 'Error interno del servidor.' });
         }
     })
+
+//Routes Recipes whit id params
+recipesRouter
+    .route("/:recipeId")
+    .put(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
+        try {
+            const recipeId = req.params.recipeId;
+            const userId = "6748e901c4fc8033a37f1626";
+            
+            if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+                return res.status(400).json({
+                    status: 400,
+                    message: "Invalid Recipe ID format",
+                });
+            }
+
+            const updatedData: Partial<IRecipes> = {
+                ...req.body,
+                updateBy: userId,
+            };
+
+            const response = await controller.updateRecipe(updatedData, recipeId);
+
+            if (response && response.status) {
+                return res.status(response.status).json(response);
+            }
+
+            res.status(500).json({ message: "Invalid response for controller" });
+        } catch (error) {
+            LogError(`[GET /api/recipes] Error: ${error}`)
+            res.status(500).send({
+                message: "Error Retrieving recipes",
+                error: error,
+            });
+        }
+    });
 
 export default recipesRouter;

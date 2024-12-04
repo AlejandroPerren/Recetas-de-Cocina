@@ -14,10 +14,16 @@ export interface IAuthController {
 
 }
 
-export interface IRecipeController{
-    //get all recipes
-    getAllRecipes(): Promise<any>
+export interface IRecipeController {
+    // Get All Recipes
+    getAllRecipes(): Promise<any>;
 
-    //Create Recipe
-    createRecipe(recipe: IRecipes):Promise<any>
+    // Create Recipe
+    createRecipe(recipe: IRecipes): Promise<any>;
+
+    // Update Recipe
+    updateRecipe(recipe: Partial<IRecipes>, recipeId: string): Promise<any>;
+
+    // Delete Recipe
+    deleteRecipe(_id: string): Promise<any>;
 }
