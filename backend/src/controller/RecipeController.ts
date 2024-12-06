@@ -86,11 +86,6 @@ export class RecipesController implements IRecipeController {
     @Put("/recipes/:recipeId")
     public async updateRecipe(@Body() recipe: Partial<IRecipes>, @Query() recipeId: string): Promise<any> {
         try {
-            if (!recipeId) {
-                return{ 
-                status : 400,
-                message: "Recipe ID is required" }
-            }
             LogSuccess(`[/api/recipes/:recipeId] Update Recipe by ID: ${recipeId}`);
             const response = await updateRecipe(recipeId, recipe);
             return {

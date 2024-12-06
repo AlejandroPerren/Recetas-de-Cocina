@@ -8,7 +8,7 @@ import { LogError } from "../../utils/logger";
 import mongoose from "mongoose";
 
 /**
- * Method to obtain all Users from Collerction "users"
+ * Method to obtain all Recipes from Collerction "Recipes"
  */
 
 //instance of entity

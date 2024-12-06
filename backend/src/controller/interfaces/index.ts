@@ -6,6 +6,12 @@ export interface IUserController {
     //Get all users
     getAllUsers(): Promise<any>
 
+    //get one User By id()
+    getUserById(): Promise<any>
+
+    //Update User
+    updateUser():Promise<any>
+
 }
 
 export interface IAuthController {
