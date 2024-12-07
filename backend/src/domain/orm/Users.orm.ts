@@ -17,15 +17,16 @@ import mongoose from "mongoose";
 const userModel = userEntity();
 
 export const getAllUsers = async (): Promise<any> => {
-        try {
-            //Search All users
-            return await userModel.find({})  ;         
-        } catch (error) {
-            LogError(`[ORM ERROR]: Getting All Users: ${error}`);
-        }
+    try {
+        //Search All users
+        return await userModel.find({});
+    } catch (error) {
+        LogError(`[ORM ERROR]: Getting All Users: ${error}`);
+    }
 };
 
-export const updateUser = async (_id: string, updateData: any): Promise<any> =>{
+
+export const updateUser = async (_id: string, updateData: any): Promise<any> => {
     try {
         if (!mongoose.Types.ObjectId.isValid(_id)) {
             throw new Error("Invalid User ID");
@@ -37,10 +38,19 @@ export const updateUser = async (_id: string, updateData: any): Promise<any> =>{
     }
 }
 
-export const getUserById = async (_id: string): Promise<any>=>{
+export const getUserById = async (_id: string): Promise<any> => {
     try {
-        return await userModel.findById({_id})
+        return await userModel.findById({ _id })
     } catch (error) {
         LogError(`[ORM ERROR]: Getting User: ${error}`);
     }
 }
+
+
+export const deleteUser = async (user: IUser): Promise<any | undefined> => {
+    try {
+        return await userModel.deleteOne({ _id: user.id })
+    } catch (error) {
+        LogError(`[ORM ERROR]: Delete User ${error}`);
+    }
+};

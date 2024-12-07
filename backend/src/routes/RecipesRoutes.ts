@@ -132,6 +132,29 @@ recipesRouter
                 error: error,
             });
         }
-    });
+    })
+    .delete(async (req: Request, res: Response): Promise<any> => {
+        try {
+            const recipeId = req.params.recipeId;
+            if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+                return res.status(400).json({
+                    status: 400,
+                    message: "Invalid user ID format",
+                });
+            }
+            const response = await controller.deleteRecipe(recipeId);
+            if (response && response.status) {
+                return res.status(response.status).json(response);
+            }
+
+            res.status(500).json({ message: "Invalid response for controller" });
+        } catch (error) {
+            LogError(`[GET /api/users/id] Error: ${error}`)
+            res.status(500).send({
+                message: "Error Delete Recipe",
+                error: error,
+            })
+        }
+    })
 
 export default recipesRouter;

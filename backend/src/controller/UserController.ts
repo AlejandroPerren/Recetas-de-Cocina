@@ -1,8 +1,8 @@
 // TSOA MSG
-import { Body, Get,  Put,  Query,  Route, Tags } from "tsoa";
+import { Body, Delete, Get,  Put,  Query,  Route, Tags } from "tsoa";
 
 //ORM - Users Collection
-import { getAllUsers, updateUser } from "../domain/orm/Users.orm";
+import { getAllUsers, updateUser, deleteUser , getUserById } from "../domain/orm/Users.orm";
 
 
 import { IUserController } from "./interfaces";
@@ -33,8 +33,29 @@ export class UserController implements IUserController {
                 error,}   
         }
     }
-    @Put("/recipes/:recipeId")
-    public async updateUSer(@Body() user: Partial<IUser>, @Query() userId: string): Promise<any> {
+
+    @Get("/")
+    public async getUserById(_id: any): Promise<any> {
+        try {
+            LogSuccess(`[/api/users:id] Get Recipe Request`)
+            const response = await getUserById(_id);
+            return {
+                status: 200,
+                message: response
+            }
+        } catch (error) {
+            LogError(`[/api/users:id]Controller Error`)
+            return {
+                status: 500,
+                message: "Error user User",
+                error,
+            }
+        }
+
+    }
+
+    @Put("/users/:userId")
+    public async updateUser(@Body() user: Partial<IUser>, @Query() userId: string): Promise<any> {
         try {
             const response = await updateUser(userId, user)
             return {
@@ -49,6 +70,18 @@ export class UserController implements IUserController {
                 message: "Error al actualizar el Usuario",
                 error,
             };
+        }
+    }
+
+    @Delete("/")
+    public async deleteUser(@Query() _id?: any): Promise<any> {
+        if (_id) {
+            LogSuccess(`[/api/users] Delete user by id: ${_id}`);
+            await deleteUser(_id);
+            return {
+                status: 200,
+                message: "Borrado Correctamente"
+            }
         }
     }
 

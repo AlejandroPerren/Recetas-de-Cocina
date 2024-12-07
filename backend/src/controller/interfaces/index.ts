@@ -1,5 +1,5 @@
 import { IRecipes } from "../../domain/interfaces/IRecipe.interface";
-import { IUser } from "../../domain/interfaces/IUser.interface";
+import { IAuth, IUser } from "../../domain/interfaces/IUser.interface";
 
 
 export interface IUserController {
@@ -7,18 +7,24 @@ export interface IUserController {
     getAllUsers(): Promise<any>
 
     //get one User By id()
-    getUserById(): Promise<any>
+    getUserById(_id: string): Promise<any>;
 
     //Update User
-    updateUser():Promise<any>
+    updateUser(user: Partial<IUser>, userId: string):Promise<any>
+
+    //Delete User
+    deleteUser():Promise<any>
 
 }
 
 export interface IAuthController {
     //register Users
-    registerUser(user: IUser): Promise<any>
+    registerUser(user: IUser): Promise<any>;
 
+    //LOGIN
+    login(auth: IAuth): Promise<any>;
 }
+
 
 export interface IRecipeController {
     // Get All Recipes

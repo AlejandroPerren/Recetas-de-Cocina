@@ -10,12 +10,15 @@ dotenv.config();
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { IAuth } from "../domain/interfaces/IUser.interface";
+import { IAuthController } from "./interfaces";
 const TOKEN_KEY: any = process.env.TOKEN_JSON_KEY;
+
+
 
 // Controlador de autenticación
 @Route("/api/auth")
 @Tags("AuthController")
-export class AuthController {
+export class AuthController implements IAuthController {
 
     /**
      * Endpoint for register New User to DB.
@@ -93,4 +96,8 @@ export class AuthController {
             };
         }
     }
+
+
+
+
 }
