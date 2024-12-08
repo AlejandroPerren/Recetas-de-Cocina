@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { GetAllRecipes } from '../network/fetchApiServices';
 import { IRecipes } from '../models/ServicesModel';
@@ -16,7 +16,7 @@ const AllRecipes = () => {
                 setAllRecipes(recipes);
             } catch (error: any) {
                 setServerError(error.message);
-                setAllRecipes([]); // Asegura que sea un array vacío si hay un error.
+                setAllRecipes([]);
             }
         };
         getRecipes();
@@ -24,18 +24,24 @@ const AllRecipes = () => {
 
     return (
         <Container>
-            {serverError && <p>Error: {serverError}</p>}
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-                {allRecipes.length > 0 ? (
-                    allRecipes.map((recipe) => (
-                        <li key={recipe._id} style={{ marginBottom: '1rem' }}>
+            {serverError && (
+                <Typography color="error" variant="h6" align="center" gutterBottom>
+                    Error: {serverError}
+                </Typography>
+            )}
+            {allRecipes.length > 0 ? (
+                <Grid container spacing={4}>
+                    {allRecipes.map((recipe) => (
+                        <Grid item key={recipe._id} xs={12} sm={6} md={4}>
                             <RecipeReviewCard card={recipe} />
-                        </li>
-                    ))
-                ) : (
-                    <p>No hay recetas disponibles.</p>
-                )}
-            </ul>
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                <Typography variant="h6" align="center" gutterBottom>
+                    No hay recetas disponibles.
+                </Typography>
+            )}
         </Container>
     );
 };

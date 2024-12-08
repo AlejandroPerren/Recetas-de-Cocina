@@ -7,42 +7,29 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IRecipes } from '../models/ServicesModel';
 
-interface ExpandMoreProps extends IconButtonProps {
+interface ExpandMoreProps {
     expand: boolean;
-  }
-  
-  const ExpandMore = styled((props: ExpandMoreProps) => {
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
-  })(({ theme }) => ({
+})(({ theme, expand }) => ({
     marginLeft: 'auto',
     transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
+        duration: theme.transitions.duration.shortest,
     }),
-    variants: [
-      {
-        props: ({ expand }) => !expand,
-        style: {
-          transform: 'rotate(0deg)',
-        },
-      },
-      {
-        props: ({ expand }) => !!expand,
-        style: {
-          transform: 'rotate(180deg)',
-        },
-      },
-    ],
-  }));
-  
+    transform: expand ? 'rotate(180deg)' : 'rotate(0deg)',
+}));
 
 function RecipeReviewCard({ card }: { card: IRecipes }) {
     const [expanded, setExpanded] = React.useState(false);
@@ -65,7 +52,7 @@ function RecipeReviewCard({ card }: { card: IRecipes }) {
                     </IconButton>
                 }
                 title={card.title}
-                subheader={card.createdAt}
+                subheader={new Date(card.createdAt).toLocaleDateString()}
             />
             <CardMedia
                 component="img"
@@ -74,8 +61,14 @@ function RecipeReviewCard({ card }: { card: IRecipes }) {
                 alt={`${card.title} image`}
             />
             <CardContent>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" color="text.secondary">
                     {card.description}
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                    <strong>Type:</strong> {card.type}
+                </Typography>
+                <Typography variant="body2">
+                    <strong>Cooking Time:</strong> {card.cookingTime} mins
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -96,7 +89,24 @@ function RecipeReviewCard({ card }: { card: IRecipes }) {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>{card.details || 'No additional details available.'}</Typography>
+                    <Typography variant="h6">Ingredients</Typography>
+                    <ul>
+                        {card.ingredients.map((ingredient) => (
+                            <li key={ingredient.name}>
+                                {ingredient.quantity} of {ingredient.name}
+                            </li>
+                        ))}
+                    </ul>
+                    <Typography variant="h6" sx={{ mt: 2 }}>
+                        Steps
+                    </Typography>
+                    <ol>
+                        {card.steps.map((step) => (
+                            <li key={step.stepNumber}>
+                                Step {step.stepNumber}: {step.instruction}
+                            </li>
+                        ))}
+                    </ol>
                 </CardContent>
             </Collapse>
         </Card>
