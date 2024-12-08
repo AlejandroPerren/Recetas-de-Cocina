@@ -74,14 +74,26 @@ export class UserController implements IUserController {
     }
 
     @Delete("/")
-    public async deleteUser(@Query() _id?: any): Promise<any> {
+    public async deleteUser(@Query() _id?: string): Promise<any> {
         if (_id) {
             LogSuccess(`[/api/users] Delete user by id: ${_id}`);
-            await deleteUser(_id);
-            return {
-                status: 200,
-                message: "Borrado Correctamente"
+            const result = await deleteUser(_id);
+            if (result && result.deletedCount > 0) {
+                return {
+                    status: 200,
+                    message: "Borrado Correctamente",
+                };
+            } else {
+                return {
+                    status: 404,
+                    message: "User not found or already deleted",
+                };
             }
+        }
+        return {
+            status: 400,
+            message: "Missing User ID",
+        };
         }
     }
 

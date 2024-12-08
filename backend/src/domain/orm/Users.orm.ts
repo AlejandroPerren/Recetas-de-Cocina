@@ -47,9 +47,9 @@ export const getUserById = async (_id: string): Promise<any> => {
 }
 
 
-export const deleteUser = async (user: IUser): Promise<any | undefined> => {
+export const deleteUser = async (_id: string): Promise<any | undefined> => {
     try {
-        return await userModel.deleteOne({ _id: user.id })
+        return await userModel.deleteOne({ _id  })
     } catch (error) {
         LogError(`[ORM ERROR]: Delete User ${error}`);
     }

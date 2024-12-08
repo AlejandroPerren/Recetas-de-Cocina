@@ -136,25 +136,31 @@ recipesRouter
     .delete(async (req: Request, res: Response): Promise<any> => {
         try {
             const recipeId = req.params.recipeId;
-            if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+    
+            if (!recipeId || !mongoose.Types.ObjectId.isValid(recipeId)) {
                 return res.status(400).json({
                     status: 400,
-                    message: "Invalid user ID format",
+                    message: "Invalid recipe ID format",
                 });
             }
+    
             const response = await controller.deleteRecipe(recipeId);
-            if (response && response.status) {
-                return res.status(response.status).json(response);
+    
+            if (response && response.status === 200) {
+                return res.status(200).json(response);
+            } else {
+                return res.status(response?.status || 500).json(response || {
+                    message: "Unknown error occurred",
+                });
             }
-
-            res.status(500).json({ message: "Invalid response for controller" });
         } catch (error) {
-            LogError(`[GET /api/users/id] Error: ${error}`)
-            res.status(500).send({
-                message: "Error Delete Recipe",
+            LogError(`[DELETE /api/recipes/:recipeId] Error: ${error}`);
+            return res.status(500).send({
+                message: "Error deleting recipe",
                 error: error,
-            })
+            });
         }
     })
+    
 
 export default recipesRouter;

@@ -54,10 +54,10 @@ export const updateRecipe = async (_id: string, updatedData: Partial<IRecipes>):
 };
 
 
-export const deleteRecipe = async(recipe: IRecipes): Promise<any | undefined> => {
- try {
-    return await recipeModel.deleteOne({_id: recipe._id})
- } catch (error) {
-    LogError(`[ORM ERROR]: Delete Recipes ${error}`);
- }
-}
+export const deleteRecipe = async (_id: string): Promise<any | undefined> => {
+    try {
+        return await recipeModel.deleteOne({ _id });
+    } catch (error) {
+        LogError(`[ORM ERROR]: Delete Recipes ${error}`);
+    }
+};

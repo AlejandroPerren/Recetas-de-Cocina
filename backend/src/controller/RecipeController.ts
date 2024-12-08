@@ -104,17 +104,29 @@ export class RecipesController implements IRecipeController {
     }
 
     @Delete("/")
-    public async deleteRecipe(@Query() _id?: any): Promise<any> {
+    public async deleteRecipe(@Query() _id?: string): Promise<any> {
         if (_id) {
             LogSuccess(`[/api/recipes] Delete Recipe by id: ${_id}`);
-            await deleteRecipe(_id);
-            return {
-                status: 200,
-                message: "Borrado Correctamente"
+            const result = await deleteRecipe(_id);
+            if (result && result.deletedCount > 0) {
+                return {
+                    status: 200,
+                    message: "Borrado Correctamente",
+                };
+            } else {
+                return {
+                    status: 404,
+                    message: "Recipe not found or already deleted",
+                };
             }
         }
+        return {
+            status: 400,
+            message: "Missing recipe ID",
+        };
     }
-
-
     
+
+
+
 }
