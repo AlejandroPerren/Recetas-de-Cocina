@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import AuthLayout from '../layout/AuthLayout';
 import SignUp from '../pages/SignUp';
 import LoginForm from '../pages/Login';
-import UsersLayout from '../layout/UsersLayout';
 import HomeLayout from '../layout/HomeLayout';
 import Home from '../pages/Home';
 import FormRecipe from '../pages/CreateRecipeForm';
@@ -41,16 +40,6 @@ const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: '/',
-        element: <UsersLayout />,
-        children: [
-            {
-                path: '',
-            }
-        ]
-    },
-
 ]);
 
 export default router;

@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import { UserController } from "../controller/UserController";
 import mongoose from "mongoose";
 import { validateRegister } from "../middlewares/validateBody.middleware";
-import { IUser } from "src/domain/interfaces/IUser.interface";
+import { IUser } from "../domain/interfaces/IUser.interface";
 
 
 
