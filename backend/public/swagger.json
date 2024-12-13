@@ -7,6 +7,24 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"Partial_IUser_": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
 			"IIngredient": {
 				"properties": {
 					"name": {
@@ -137,6 +155,9 @@
 			},
 			"IUser": {
 				"properties": {
+					"id": {
+						"type": "string"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -189,7 +210,7 @@
 				"operationId": "GetAllUsers",
 				"responses": {
 					"200": {
-						"description": "all users",
+						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -197,7 +218,6 @@
 						}
 					}
 				},
-				"description": "Endpoint to retrieve users from the \"Users\" collection in the DB.",
 				"tags": [
 					"UserController"
 				],
@@ -205,12 +225,12 @@
 				"parameters": []
 			}
 		},
-		"/api/recipes": {
+		"/api/users/{id}": {
 			"get": {
-				"operationId": "GetAllRecipes",
+				"operationId": "GetUserById",
 				"responses": {
 					"200": {
-						"description": "all users",
+						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -218,12 +238,134 @@
 						}
 					}
 				},
-				"description": "Endpoint to retrieve recipes from the \"Recipes\" collection in the DB.",
+				"tags": [
+					"UserController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"UserController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/users/{userId}": {
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"UserController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_IUser_"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/recipes": {
+			"get": {
+				"operationId": "GetAllRecipes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
 				"tags": [
 					"RecipesController"
 				],
 				"security": [],
 				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateRecipe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"RecipesController"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IRecipes"
+							}
+						}
+					}
+				}
 			},
 			"delete": {
 				"operationId": "DeleteRecipe",
@@ -253,12 +395,12 @@
 				]
 			}
 		},
-		"/api/recipes/recipes": {
-			"post": {
-				"operationId": "CreateRecipe",
+		"/api/recipes/{_id}": {
+			"get": {
+				"operationId": "GetRecipeById",
 				"responses": {
 					"200": {
-						"description": "MSG recipes result, if result = Successfull, save recipe",
+						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -266,25 +408,23 @@
 						}
 					}
 				},
-				"description": "Endpoint to Create recipes from the \"Recipes\" collection in the DB.",
 				"tags": [
 					"RecipesController"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/IRecipes"
-							}
+				"parameters": [
+					{
+						"in": "query",
+						"name": "_id",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
-				}
+				]
 			}
 		},
-		"/api/recipes/recipes/{recipeId}": {
+		"/api/recipes/{recipeId}": {
 			"put": {
 				"operationId": "UpdateRecipe",
 				"responses": {

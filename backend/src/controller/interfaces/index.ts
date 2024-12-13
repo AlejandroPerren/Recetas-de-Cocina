@@ -13,7 +13,7 @@ export interface IUserController {
     updateUser(user: Partial<IUser>, userId: string):Promise<any>
 
     //Delete User
-    deleteUser():Promise<any>
+    deleteUser(id: string):Promise<any>
 
 }
 

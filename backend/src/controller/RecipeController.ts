@@ -11,82 +11,74 @@ import { IRecipes } from "../domain/interfaces/IRecipe.interface";
 @Route("/api/recipes")
 @Tags("RecipesController")
 export class RecipesController implements IRecipeController {
-    /**
-    * Endpoint to retrieve recipes from the "Recipes" collection in the DB.
-    * @returns all Recipes
-    */
     @Get("/")
     public async getAllRecipes(): Promise<any> {
         try {
-            LogSuccess(`[/api/recipes] Get Recipes Request`)
+            LogSuccess(`[/api/recipes] Get Recipes Request`);
             const response = await getAllRecipes();
             return {
                 status: 200,
-                message: response
-            }
+                message: response,
+            };
         } catch (error) {
-            LogError(`[/api/recipes]Controller Error`)
+            LogError(`[/api/recipes] Controller Error`);
             return {
                 status: 500,
-                message: "Error recipes Users",
+                message: "Error retrieving recipes",
                 error,
-            }
+            };
         }
-
     }
-       /**
-    * Endpoint to retrieve recipe from the "Recipes" collection in the DB Browser by ID.
-    * @returns One Recipe
-    */
-    @Get("/")
-    public async getRecipeById(_id: any): Promise<any> {
+
+    @Get("/{_id}")
+    public async getRecipeById(@Query() _id: string): Promise<any> {
         try {
-            LogSuccess(`[/api/recipes] Get Recipe Request`)
+            LogSuccess(`[/api/recipes/${_id}] Get Recipe Request`);
             const response = await getRecipeById(_id);
             return {
                 status: 200,
-                message: response
-            }
+                message: response,
+            };
         } catch (error) {
-            LogError(`[/api/recipes]Controller Error`)
+            LogError(`[/api/recipes/${_id}] Controller Error`);
             return {
                 status: 500,
-                message: "Error recipe User",
+                message: "Error retrieving the recipe",
                 error,
-            }
+            };
         }
-
     }
-    /**
-   * Endpoint to Create recipes from the "Recipes" collection in the DB.
-   * @returns MSG recipes result, if result = Successfull, save recipe 
-   */
-    @Post("/recipes")
+
+    @Post("/")
     public async createRecipe(@Body() recipe: IRecipes): Promise<any> {
-        if (recipe) {
-            LogSuccess(`[/api/recipes] Creating New Recipe: ${recipe.title}`);
-            try {
-                const response = await createRecipe(recipe);
-                return {
-                    status: 200,
-                    message: `Recipe created successfully: ${recipe.title}`,
-                    data: response
-                };
-            } catch (error) {
-                LogError(`[REGISTER ERROR]: ${error}`);
-                return {
-                    status: 500,
-                    message: "Error creating recipe.",
-                    error,
-                };
-            }
+        if (!recipe) {
+            return {
+                status: 400,
+                message: "Recipe data is missing",
+            };
+        }
+        LogSuccess(`[/api/recipes] Creating New Recipe: ${recipe.title}`);
+        try {
+            const response = await createRecipe(recipe);
+            return {
+                status: 200,
+                message: `Recipe created successfully: ${recipe.title}`,
+                data: response,
+            };
+        } catch (error) {
+            LogError(`[REGISTER ERROR]: ${error}`);
+            return {
+                status: 500,
+                message: "Error creating recipe.",
+                error,
+            };
         }
     }
 
-    @Put("/recipes/:recipeId")
+    @Put("/{recipeId}")
     public async updateRecipe(@Body() recipe: Partial<IRecipes>, @Query() recipeId: string): Promise<any> {
         try {
-            LogSuccess(`[/api/recipes/:recipeId] Update Recipe by ID: ${recipeId}`);
+            LogSuccess(`[/api/recipes/${recipeId}] Update Recipe by ID: ${recipeId}`);
             const response = await updateRecipe(recipeId, recipe);
             return {
                 status: 200,
@@ -106,12 +98,12 @@ export class RecipesController implements IRecipeController {
     @Delete("/")
     public async deleteRecipe(@Query() _id?: string): Promise<any> {
         if (_id) {
-            LogSuccess(`[/api/recipes] Delete Recipe by id: ${_id}`);
+            LogSuccess(`[/api/recipes] Delete Recipe by ID: ${_id}`);
             const result = await deleteRecipe(_id);
             if (result && result.deletedCount > 0) {
                 return {
                     status: 200,
-                    message: "Borrado Correctamente",
+                    message: "Recipe deleted successfully",
                 };
             } else {
                 return {
@@ -125,8 +117,8 @@ export class RecipesController implements IRecipeController {
             message: "Missing recipe ID",
         };
     }
-    
-
-
-
 }
+
+
+
+
