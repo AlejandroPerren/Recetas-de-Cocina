@@ -17,23 +17,25 @@ if (!KeyToken) {
  * @param {NextFunction} next Next function to be executed
  * @returns Errors of verification or next execution
  */
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
     // Check HEADER from Request for 'x-access-token'
-    const jwToken: any = req.headers['x-asccess-token'];
+    const jwToken: any = req.headers['x-access-token'];
 
     if (!jwToken) {
-        return res.status(403).send({
+        res.status(403).send({
             authentication: 'Missing JWT in request',
             message: 'Not authorized to consume this endpoint'
         });
+        return;
     }
 
     jwt.verify(jwToken, KeyToken, (err: any, decoded: any) => {
         if (err) {
-            return res.status(403).send({
+            res.status(403).send({
                 authentication: 'JWT verification failed',
                 message: 'Failed to verify JWT in request'
             });
+            return;
         }
         // Attach the decoded token to the request object for further use
         req.body.user = decoded;

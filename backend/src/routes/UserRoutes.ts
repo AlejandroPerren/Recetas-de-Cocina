@@ -7,6 +7,7 @@ import { UserController } from "../controller/UserController";
 import mongoose from "mongoose";
 import { validateRegister } from "../middlewares/validateBody.middleware";
 import { IUser } from "../domain/interfaces/IUser.interface";
+import { verifyToken } from "../middlewares/verifyToken.middleware";
 
 
 
@@ -67,7 +68,7 @@ userRouter
         }
     })
 
-    .put(jsonParser, validateRegister, async (req: Request, res: Response): Promise<any> => {
+    .put(verifyToken, jsonParser, validateRegister, async (req: Request, res: Response): Promise<any> => {
         try {
             const userId = req.params.userId;
 
@@ -98,7 +99,7 @@ userRouter
             });
         }
     })
-    .delete(async (req: Request, res: Response): Promise<any> => {
+    .delete(verifyToken, async (req: Request, res: Response): Promise<any> => {
         try {
             const userId = req.params.userId;
             if (!mongoose.Types.ObjectId.isValid(userId)) {

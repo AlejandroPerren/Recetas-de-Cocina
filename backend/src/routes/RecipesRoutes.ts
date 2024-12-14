@@ -16,6 +16,7 @@ const controller: RecipesController = new RecipesController();
 import bodyParser from "body-parser";
 import { validateNewRecipe } from "../middlewares/validateBody.middleware";
 import mongoose from "mongoose";
+import { verifyToken } from "../middlewares/verifyToken.middleware";
 
 // Middleware
 const jsonParser = bodyParser.json();
@@ -41,7 +42,7 @@ recipesRouter
                 });
             }
         })
-    .post(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
+    .post(verifyToken ,jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
         try {
             //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
@@ -65,8 +66,6 @@ recipesRouter
             if (response && response.status) {
                 return res.status(response.status).json(response);
             }
-
-            // Si no hay un código de estado en la respuesta, asume un error interno
             res.status(500).json({ message: "Respuesta inválida del controlador" });
 
         } catch (error) {
@@ -101,7 +100,7 @@ recipesRouter
             })
         }
     })
-    .put(jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
+    .put(verifyToken, jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
         try {
             const recipeId = req.params.recipeId;
             const userId = "6748e901c4fc8033a37f1626";
@@ -133,7 +132,7 @@ recipesRouter
             });
         }
     })
-    .delete(async (req: Request, res: Response): Promise<any> => {
+    .delete(verifyToken, async (req: Request, res: Response): Promise<any> => {
         try {
             const recipeId = req.params.recipeId;
     
