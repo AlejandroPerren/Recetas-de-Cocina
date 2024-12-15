@@ -4,8 +4,7 @@ import { IRecipes } from "../interfaces/IRecipe.interface";
 
 //entity of recipes
 import { recipeEntity } from "../entities/Recipe.entity";
-import { LogError } from "../../utils/logger";
-import mongoose from "mongoose";
+import { LogError, LogSuccess } from "../../utils/logger";
 
 /**
  * Method to obtain all Recipes from Collerction "Recipes"
@@ -43,9 +42,6 @@ export const createRecipe = async(recipe: IRecipes): Promise<any | undefined> =>
 
 export const updateRecipe = async (_id: string, updatedData: Partial<IRecipes>): Promise<any> => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(_id)) {
-            throw new Error("Invalid Recipe ID");
-        }
         return await recipeModel.findByIdAndUpdate(_id, updatedData, { new: true });
     } catch (error) {
         LogError(`[ORM ERROR]: Updating Recipe ${error}`);
@@ -59,5 +55,16 @@ export const deleteRecipe = async (_id: string): Promise<any | undefined> => {
         return await recipeModel.deleteOne({ _id });
     } catch (error) {
         LogError(`[ORM ERROR]: Delete Recipes ${error}`);
+    }
+};
+
+export const getAllRecipesByUser = async (userId: string): Promise<any[]> => {
+    try {
+        const recipes = await recipeModel.find({ createdBy: userId });
+        LogSuccess(`[ORM]: Found recipes for user ${userId}: ${JSON.stringify(recipes)}`);
+        return recipes;
+    } catch (error) {
+        LogError(`[ORM ERROR]: Fetching recipes for user ${userId}: ${error}`);
+        throw error;
     }
 };

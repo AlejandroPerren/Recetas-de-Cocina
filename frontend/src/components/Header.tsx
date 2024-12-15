@@ -37,16 +37,16 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" sx={{ flexGrow: 1 }} component={Link} to="/home">
           Recetas De/Para Todos
         </Typography>
 
         {isLoggedIn ? (
           <>
-            <Button color="inherit" component={Link} to="/mis-recetas">
+            <Button color="inherit" component={Link} to="/myrecipes">
               Mis recetas
             </Button>
-            <Button color="inherit" onClick={handleModalOpen}>
+            <Button color="inherit" component={Link} to="/recipe/create">
               Crear Receta
             </Button>
             <IconButton

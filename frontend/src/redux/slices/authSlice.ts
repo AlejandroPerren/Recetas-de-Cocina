@@ -6,7 +6,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem('authToken'), // Cargar el token desde localStorage al iniciar
+  token: localStorage.getItem('authToken'),
   isLoggedIn: !!localStorage.getItem('authToken'),
 };
 
@@ -17,12 +17,12 @@ const authSlice = createSlice({
     login: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       state.isLoggedIn = true;
-      localStorage.setItem('authToken', action.payload); // Guardar el token en localStorage
+      localStorage.setItem('authToken', action.payload); 
     },
     logOut: (state) => {
       state.token = null;
       state.isLoggedIn = false;
-      localStorage.removeItem('authToken'); // Eliminar el token de localStorage
+      localStorage.removeItem('authToken'); 
     },
   },
 });

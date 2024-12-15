@@ -18,6 +18,7 @@ import { validateNewRecipe } from "../middlewares/validateBody.middleware";
 import mongoose from "mongoose";
 import { verifyToken } from "../middlewares/verifyToken.middleware";
 
+
 // Middleware
 const jsonParser = bodyParser.json();
 
@@ -160,6 +161,38 @@ recipesRouter
             });
         }
     })
+
+    recipesRouter.get("/user/:userId",async (req: Request, res: Response): Promise<any> => {
+            try {
+                const userId = req.params.userId;
     
+                if (!mongoose.Types.ObjectId.isValid(userId)) {
+                    return res.status(400).json({
+                        status: 400,
+                        message: "Invalid User ID format",
+                    });
+                }
+
+                const response = await controller.getRecipesByUser(userId);
+    
+                if (response && response.status) {
+                    return res.status(response.status).json(response);
+                }
+    
+                return res.status(500).json({
+                    message: "Invalid response from controller",
+                });
+            } catch (error) {
+                LogError(`[GET /api/recipes/user/:userId] Error: ${error}`);
+                return res.status(500).json({
+                    message: "Error retrieving recipes for user",
+                    error,
+                });
+            }
+        }
+    );
+    
+    
+  
 
 export default recipesRouter;

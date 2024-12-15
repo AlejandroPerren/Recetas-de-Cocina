@@ -1,7 +1,7 @@
 import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
 
 //ORM - Recipes Collection
-import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe, getRecipeById } from "../domain/orm/Recipes.orm";
+import { getAllRecipes, createRecipe, updateRecipe, deleteRecipe, getRecipeById, getAllRecipesByUser } from "../domain/orm/Recipes.orm";
 import { IRecipeController } from "./interfaces";
 import { LogError, LogSuccess } from "../utils/logger";
 import { IRecipes } from "../domain/interfaces/IRecipe.interface";
@@ -48,7 +48,35 @@ export class RecipesController implements IRecipeController {
             };
         }
     }
-
+    @Get("/{userId}")
+    public async getRecipesByUser(@Query() userId: string): Promise<any> {
+        try {
+            LogSuccess(`[Controller]: Fetching recipes for user ${userId}`);
+            const recipes = await getAllRecipesByUser(userId);
+    
+            if (!recipes || recipes.length === 0) {
+                return {
+                    status: 404,
+                    message: `No recipes found for user with ID ${userId}`,
+                    data: [],
+                };
+            }
+    
+            return {
+                status: 200,
+                message: `Recipes fetched successfully for user ${userId}`,
+                data: recipes, 
+            };
+        } catch (error) {
+            LogError(`[Controller Error] Fetching recipes for user: ${error}`);
+            return {
+                status: 500,
+                message: "Error retrieving recipes for the user",
+                error,
+            };
+        }
+    }
+    
     @Post("/")
     public async createRecipe(@Body() recipe: IRecipes): Promise<any> {
         if (!recipe) {

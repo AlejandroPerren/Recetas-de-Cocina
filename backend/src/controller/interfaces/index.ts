@@ -36,6 +36,9 @@ export interface IRecipeController {
     // Create Recipe
     createRecipe(recipe: IRecipes): Promise<any>;
 
+    //Get Recipes To user By User Id
+    getRecipesByUser(userId: string): Promise<any>;
+
     // Update Recipe
     updateRecipe(recipe: Partial<IRecipes>, recipeId: string): Promise<any>;
 

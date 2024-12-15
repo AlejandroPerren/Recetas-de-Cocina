@@ -424,6 +424,35 @@
 				]
 			}
 		},
+		"/api/recipes/{userId}": {
+			"get": {
+				"operationId": "GetRecipesByUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"RecipesController"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/api/recipes/{recipeId}": {
 			"put": {
 				"operationId": "UpdateRecipe",

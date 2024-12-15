@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography } from '@mui/material';
-import { GetAllRecipes } from '../network/fetchApiServices';
+import { GetAllRecipes, GetRecipesByUserId } from '../network/fetchApiServices';
 import { IRecipes } from '../models/ServicesModel';
 import RecipeReviewCard from '../props/RecipeReviewCard';
 import RecipeFilter from '../utils/Filter';
 
-const AllRecipes = () => {
+interface AllRecipesProps {
+    userId?: string;
+}
+
+const AllRecipes = ({ userId }: AllRecipesProps) => {
     const [serverError, setServerError] = useState<string | null>(null);
     const [allRecipes, setAllRecipes] = useState<IRecipes[]>([]);
     const [filteredRecipes, setFilteredRecipes] = useState<IRecipes[]>([]);
@@ -14,7 +18,12 @@ const AllRecipes = () => {
         const getRecipes = async () => {
             try {
                 setServerError(null);
-                const recipes = await GetAllRecipes();
+
+           
+                const recipes = userId
+                    ? await GetRecipesByUserId(userId) 
+                    : await GetAllRecipes(); 
+
                 setAllRecipes(recipes);
                 setFilteredRecipes(recipes);
             } catch (error: any) {
@@ -23,8 +32,9 @@ const AllRecipes = () => {
                 setFilteredRecipes([]);
             }
         };
+
         getRecipes();
-    }, []);
+    }, [userId]);
 
     return (
         <Container>

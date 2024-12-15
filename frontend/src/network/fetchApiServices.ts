@@ -74,4 +74,13 @@ export async function UpdateRecipe(recipe: ICreateRecipe, id: string): Promise<a
     body: JSON.stringify(recipe)
   } )
 }
+export async function GetRecipesByUserId(userId: string): Promise<any> {
+  return fetchData(`${SummaryApi.GetRecipesByUserId.url}/${userId}`, {
+    method: SummaryApi.GetRecipesByUserId.method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
 
