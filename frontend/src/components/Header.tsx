@@ -11,14 +11,16 @@ import {
   Box,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../redux/slices/authSlice";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
- 
+  const userId = useSelector((state: any) => state.auth.userId); 
+
   const handleLogOut = () => {
     dispatch(logOut());
   };
@@ -34,6 +36,10 @@ const Header: React.FC = () => {
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
 
+  const handleMyRecipesClick = () => {
+    navigate(`/myrecipes?userId=${userId}`);
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -43,7 +49,7 @@ const Header: React.FC = () => {
 
         {isLoggedIn ? (
           <>
-            <Button color="inherit" component={Link} to="/myrecipes">
+            <Button color="inherit" onClick={handleMyRecipesClick}>
               Mis recetas
             </Button>
             <Button color="inherit" component={Link} to="/recipe/create">

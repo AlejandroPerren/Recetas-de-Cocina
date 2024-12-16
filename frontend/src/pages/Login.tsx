@@ -5,14 +5,12 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/slices/authSlice';
 
-
 import { LoginSchema } from '../yupSchemas/Schemas';
 import { ILogin } from '../models/AuthModel';
 import { Login } from '../network/fetchApiServices';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-
   const navigate = useNavigate();
   const {
     control,
@@ -33,12 +31,13 @@ const LoginForm = () => {
     try {
       setServerError(null);
       const response = await Login(auth);
-
+  
       if (response.status === 200) {
-        const { token } = response;
-        
-        dispatch(login(token));
-
+        const { token, user } = response;  
+        const userId = user.id;  
+  
+        dispatch(login({ token, userId }));
+  
         alert("Inicio de sesión exitoso");
         reset();
         navigate("/home");
@@ -49,7 +48,6 @@ const LoginForm = () => {
       setServerError(error.message);
     }
   };
-
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" textAlign="center" sx={{ marginBottom: 3 }}>

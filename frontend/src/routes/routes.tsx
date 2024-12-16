@@ -6,6 +6,7 @@ import HomeLayout from '../layout/HomeLayout';
 import Home from '../pages/Home';
 import FormRecipe from '../pages/CreateRecipeForm';
 import UpdateFormRecipe from '../pages/EditarRecipeForm';
+import AllRecipes from '../components/AllRecipes';
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             {
                 path: 'recipe/update/:id',
                 element: <UpdateFormRecipe/>
+            },
+            {
+                path: 'myrecipes/:id',
+                element: <AllRecipes/>
             }
         ]
     },
