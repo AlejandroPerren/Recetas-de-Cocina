@@ -84,3 +84,13 @@ export async function GetRecipesByUserId(userId: string): Promise<any> {
 }
 
 
+//Users
+export async function GetUserById(userId: string): Promise<any> {
+  return fetchData(`${SummaryApi.GetUserById.url}/${userId}`, {
+    method: SummaryApi.GetUserById.method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+

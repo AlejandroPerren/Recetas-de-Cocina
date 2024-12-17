@@ -424,7 +424,7 @@
 				]
 			}
 		},
-		"/api/recipes/{userId}": {
+		"/api/recipes/user/{userId}": {
 			"get": {
 				"operationId": "GetRecipesByUser",
 				"responses": {

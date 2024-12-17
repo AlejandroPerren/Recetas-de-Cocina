@@ -48,7 +48,7 @@ export class RecipesController implements IRecipeController {
             };
         }
     }
-    @Get("/{userId}")
+    @Get("/user/{userId}")
     public async getRecipesByUser(@Query() userId: string): Promise<any> {
         try {
             LogSuccess(`[Controller]: Fetching recipes for user ${userId}`);

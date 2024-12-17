@@ -7,8 +7,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Modal,
-  Box,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,27 +15,28 @@ import { logOut } from "../redux/slices/authSlice";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
-  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-  const userId = useSelector((state: any) => state.auth.userId); 
+  const navigate = useNavigate();
 
-  const handleLogOut = () => {
-    dispatch(logOut());
-  };
+  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+  const userId = useSelector((state: any) => state.auth.userId);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [modalContent, setModalContent] = useState<string>("");
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
 
   const handleMenuClose = () => setAnchorEl(null);
 
-  const handleModalOpen = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate("/login"); // Redirigir al login después de cerrar sesión
+  };
 
-  const handleMyRecipesClick = () => {
-    navigate(`/myrecipes?userId=${userId}`);
+  const goToAccount = () => {
+    if (userId) {
+      navigate(`/user`);
+    }
+    handleMenuClose();
   };
 
   return (
@@ -49,9 +48,6 @@ const Header: React.FC = () => {
 
         {isLoggedIn ? (
           <>
-            <Button color="inherit" onClick={handleMyRecipesClick}>
-              Mis recetas
-            </Button>
             <Button color="inherit" component={Link} to="/recipe/create">
               Crear Receta
             </Button>
@@ -68,14 +64,7 @@ const Header: React.FC = () => {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => {
-                  setModalContent("Cuenta");
-                  handleModalOpen();
-                }}
-              >
-                Cuenta
-              </MenuItem>
+              <MenuItem onClick={goToAccount}>Cuenta</MenuItem>
               <MenuItem onClick={handleLogOut}>Cerrar sesión</MenuItem>
             </Menu>
           </>
@@ -89,42 +78,6 @@ const Header: React.FC = () => {
             </Button>
           </>
         )}
-
-        <Modal
-          open={openModal}
-          onClose={handleModalClose}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              bgcolor: "background.paper",
-              padding: 4,
-              borderRadius: 2,
-              boxShadow: 24,
-            }}
-          >
-            <Typography id="modal-title" variant="h6">
-              {modalContent}
-            </Typography>
-            <Typography id="modal-description" sx={{ mt: 2 }}>
-              {modalContent === "Cuenta"
-                ? "Aquí puedes gestionar tu cuenta"
-                : "Contenido del modal"}
-            </Typography>
-            <Button
-              variant="outlined"
-              onClick={handleModalClose}
-              sx={{ mt: 2 }}
-            >
-              Cerrar
-            </Button>
-          </Box>
-        </Modal>
       </Toolbar>
     </AppBar>
   );

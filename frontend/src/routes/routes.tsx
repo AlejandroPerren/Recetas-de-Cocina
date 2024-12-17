@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import FormRecipe from '../pages/CreateRecipeForm';
 import UpdateFormRecipe from '../pages/EditarRecipeForm';
 import AllRecipes from '../components/AllRecipes';
+import UserData from '../pages/UserData';
 
 const router = createBrowserRouter([
     {
@@ -40,8 +41,8 @@ const router = createBrowserRouter([
                 element: <UpdateFormRecipe/>
             },
             {
-                path: 'myrecipes/:id',
-                element: <AllRecipes/>
+                path: 'user',
+                element: <UserData/>
             }
         ]
     },

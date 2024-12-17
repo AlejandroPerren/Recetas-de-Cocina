@@ -28,6 +28,10 @@ const SummaryApi = {
         url: `${backendDomain}/recipes/user`,
         method: `get`
     },
+    GetUserById:{
+        url: `${backendDomain}/users`,
+        method: `get`
+    },
 }
 
 export default SummaryApi;
