@@ -18,8 +18,9 @@ if (!KeyToken) {
  * @returns Errors of verification or next execution
  */
 export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.headers['x-access-token'] as string;
-
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    
     if (!token) {
         res.status(403).json({
             authentication: 'Missing JWT in request',

@@ -7,7 +7,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem("authToken"),
+ 
+  token: localStorage.getItem("authToken") ? `Bearer ${localStorage.getItem("authToken")}` : null,
   userId: localStorage.getItem("userId"),
   isLoggedIn: !!localStorage.getItem("authToken"),
 };
@@ -17,8 +18,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<{ token: string }>) => {
-      state.token = action.payload.token;
-      localStorage.setItem("authToken", action.payload.token);
+      
+      const token = action.payload.token;
+      state.token = `Bearer ${token}`;
+      localStorage.setItem("authToken", token); 
     },
     logOut: (state) => {
       state.token = null;
