@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   token: string | null;
@@ -7,28 +7,22 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem('authToken'),
-  userId: localStorage.getItem('userId'),
-  isLoggedIn: !!localStorage.getItem('authToken'),
+  token: localStorage.getItem("authToken"),
+  userId: localStorage.getItem("userId"),
+  isLoggedIn: !!localStorage.getItem("authToken"),
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ token: string, userId: string }>) => {
+    login: (state, action: PayloadAction<{ token: string }>) => {
       state.token = action.payload.token;
-      state.userId = action.payload.userId;
-      state.isLoggedIn = true;
-      localStorage.setItem('authToken', action.payload.token);
-      localStorage.setItem('userId', action.payload.userId);
+      localStorage.setItem("authToken", action.payload.token);
     },
     logOut: (state) => {
       state.token = null;
-      state.userId = null;
-      state.isLoggedIn = false;
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userId'); 
+      localStorage.removeItem("authToken");
     },
   },
 });

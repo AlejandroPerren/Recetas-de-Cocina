@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/slices/authSlice';
-
 import { LoginSchema } from '../yupSchemas/Schemas';
 import { ILogin } from '../models/AuthModel';
 import { Login } from '../network/fetchApiServices';
@@ -12,32 +11,21 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-  } = useForm({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(LoginSchema),
   });
 
   const [serverError, setServerError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
-  const formData = watch();
-
   const onSubmit = async (auth: ILogin) => {
     try {
       setServerError(null);
       const response = await Login(auth);
-  
+
       if (response.status === 200) {
-        const { token, user } = response;  
-        const userId = user.id;  
-  
-        dispatch(login({ token, userId }));
-  
+        const { token, user } = response;
+        dispatch(login({ token }));
         alert("Inicio de sesión exitoso");
         reset();
         navigate("/home");
@@ -48,6 +36,7 @@ const LoginForm = () => {
       setServerError(error.message);
     }
   };
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" textAlign="center" sx={{ marginBottom: 3 }}>
@@ -60,59 +49,43 @@ const LoginForm = () => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <Box>
-                <TextField
-                  {...field}
-                  label="Correo Electrónico"
-                  type="email"
-                  variant="outlined"
-                  error={!!errors.email}
-                  fullWidth
-                />
-                <Typography color="error" variant="body2">
-                  {errors.email?.message}
-                </Typography>
-              </Box>
+              <TextField
+                {...field}
+                label="Correo Electrónico"
+                type="email"
+                variant="outlined"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                fullWidth
+              />
             )}
           />
-
           <Controller
             name="password"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <Box>
-                <TextField
-                  {...field}
-                  label="Contraseña"
-                  type="password"
-                  variant="outlined"
-                  error={!!errors.password}
-                  fullWidth
-                />
-                <Typography color="error" variant="body2">
-                  {errors.password?.message}
-                </Typography>
-              </Box>
+              <TextField
+                {...field}
+                label="Contraseña"
+                type="password"
+                variant="outlined"
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                fullWidth
+              />
             )}
           />
-
           <Button type="submit" variant="contained" color="primary">
             Iniciar Sesión
           </Button>
         </Box>
       </form>
-
       {serverError && (
         <Typography color="error" variant="body2" sx={{ marginTop: 2 }}>
           {serverError}
         </Typography>
       )}
-
-      <Box marginTop={4}>
-        <Typography variant="h6">Valores actuales del formulario:</Typography>
-        <pre>{JSON.stringify(formData, null, 2)}</pre>
-      </Box>
     </Container>
   );
 };

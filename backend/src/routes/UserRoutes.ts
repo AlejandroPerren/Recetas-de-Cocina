@@ -46,7 +46,7 @@ userRouter
     .route("/:userId")
     .get(async (req: Request, res: Response): Promise<any> => {
         try {
-            const userId = req.params.userId;
+            const userId = req.body.user.userId;
             if (!mongoose.Types.ObjectId.isValid(userId)) {
                 return res.status(400).json({
                     status: 400,
@@ -70,7 +70,7 @@ userRouter
 
     .put(verifyToken, jsonParser, validateRegister, async (req: Request, res: Response): Promise<any> => {
         try {
-            const userId = req.params.userId;
+            const userId = req.body.user.userId;
 
             if (!mongoose.Types.ObjectId.isValid(userId)) {
                 return res.status(400).json({

@@ -48,7 +48,7 @@ recipesRouter
             //body of Request
             const { title, description, ingredients, steps, cookingTime, type, image } = req.body;
             //id by query
-            const userId = "674b21d71404dd30eb87a061" as string
+            const userId = req.body.user.userId;
             //userId by params
 
 
@@ -104,31 +104,31 @@ recipesRouter
     .put(verifyToken, jsonParser, validateNewRecipe, async (req: Request, res: Response): Promise<any> => {
         try {
             const recipeId = req.params.recipeId;
-            const userId = "6748e901c4fc8033a37f1626";
-
+            const userId = req.body.user.userId;
+    
             if (!mongoose.Types.ObjectId.isValid(recipeId)) {
                 return res.status(400).json({
                     status: 400,
                     message: "Invalid Recipe ID format",
                 });
             }
-
+    
             const updatedData: Partial<IRecipes> = {
                 ...req.body,
-                updateBy: userId,
+                updateBy: userId, 
             };
-
+    
             const response = await controller.updateRecipe(updatedData, recipeId);
-
+    
             if (response && response.status) {
                 return res.status(response.status).json(response);
             }
-
+    
             res.status(500).json({ message: "Invalid response for controller" });
         } catch (error) {
-            LogError(`[GET /api/recipes] Error: ${error}`)
+            LogError(`[PUT /api/recipes] Error: ${error}`);
             res.status(500).send({
-                message: "Error Retrieving recipes",
+                message: "Error Updating recipe",
                 error: error,
             });
         }
