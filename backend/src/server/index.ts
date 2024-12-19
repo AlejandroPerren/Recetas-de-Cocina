@@ -29,8 +29,8 @@ dotenv.config()
 const corsOptions = {
     origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "x-access-token"]
-  };
+    allowedHeaders: ["Content-Type", "Authorization", "x-access-token"] // Agregado "Authorization"
+};
 
 //Security Config
 server.use(helmet());

@@ -2,7 +2,7 @@ import SummaryApi from "../common/SummaryApi";
 import { ApiError } from "../errors/http_errors";
 import { ILogin, ISignUp } from "../models/AuthModel";
 import { ICreateRecipe } from "../models/ServicesModel";
-import { RootState } from '../redux/store';
+import store from "../redux/store";
 
 // Reusable function body for requests
 async function fetchData(input: RequestInfo, init?: RequestInit) {
@@ -14,6 +14,18 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
   }
   return response.json();
 }
+// Obtén el token directamente del estado de Redux
+const token = store.getState().auth.token;
+if (!token) {
+  throw new Error("No se encontró un token de autenticación.");
+}
+
+// Headers comunes con autorización
+const commonHeaders = {
+  Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
+};
+
 
 // SignUp
 export async function SignUp(user: ISignUp): Promise<any> {
@@ -56,22 +68,18 @@ export async function GetRecipeById(id: any) {
   });
 }
 
-export async function CreateNewRecipe(recipe: ICreateRecipe, getState: () => RootState): Promise<any> {
-  // Obtén el token del estado global (store)
-  const token = getState().auth.token;
-
-  if (!token) {
-    throw new Error("No se encontró un token de autenticación.");
-  }
-
-  return fetchData(SummaryApi.CreateNewRecipe.url, {
+export async function CreateNewRecipe(recipe: ICreateRecipe): Promise<any> {
+  const response = await fetch(SummaryApi.CreateNewRecipe.url, {
     method: SummaryApi.CreateNewRecipe.method,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`, // Añade el token en los headers
-    },
+    headers: commonHeaders,
     body: JSON.stringify(recipe),
   });
+
+  if (!response.ok) {
+    throw new ApiError(response.status, "Error al crear receta");
+  }
+
+  return response.json();
 }
 
 
