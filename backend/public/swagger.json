@@ -497,7 +497,7 @@
 				"operationId": "RegisterUser",
 				"responses": {
 					"200": {
-						"description": "msg whit result.",
+						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -505,20 +505,17 @@
 						}
 					}
 				},
-				"description": "Endpoint for register New User to DB.",
 				"tags": [
 					"AuthController"
 				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
-					"description": "data for register.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IUser",
-								"description": "data for register."
+								"$ref": "#/components/schemas/IUser"
 							}
 						}
 					}

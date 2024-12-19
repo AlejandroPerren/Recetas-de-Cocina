@@ -85,6 +85,7 @@ export class RecipesController implements IRecipeController {
                 message: "Recipe data is missing",
             };
         }
+        
         LogSuccess(`[/api/recipes] Creating New Recipe: ${recipe.title}`);
         try {
             const response = await createRecipe(recipe);

@@ -1,22 +1,28 @@
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
-import { LoginSchema } from '../yupSchemas/Schemas';
-import { ILogin } from '../models/AuthModel';
-import { Login } from '../network/fetchApiServices';
-import { useNavigate } from 'react-router-dom';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/authSlice";
+import { LoginSchema } from "../yupSchemas/Schemas";
+import { ILogin } from "../models/AuthModel";
+import { Login } from "../network/fetchApiServices";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { control, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(LoginSchema),
   });
 
   const [serverError, setServerError] = useState<string | null>(null);
-  const dispatch = useDispatch();
 
   const onSubmit = async (auth: ILogin) => {
     try {
@@ -24,8 +30,8 @@ const LoginForm = () => {
       const response = await Login(auth);
 
       if (response.status === 200) {
-        const { token, user } = response;
-        dispatch(login({ token }));
+        const { token, userId } = response;
+        dispatch(login({ token, userId }));
         alert("Inicio de sesión exitoso");
         reset();
         navigate("/home");
