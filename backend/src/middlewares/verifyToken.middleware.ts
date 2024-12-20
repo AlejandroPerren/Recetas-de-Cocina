@@ -17,8 +17,10 @@ if (!KeyToken) {
  * @param next Función para pasar al siguiente middleware
  */
 export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
-  // Obtener el token del localStorage de la solicitud (esto simula que lees el localStorage del frontend)
-  const token = req.body.token || req.query.token || req.headers["token"]; // Verifica si hay un token en el cuerpo, query o encabezado
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.startsWith("Bearer ")
+    ? authHeader.split(" ")[1]
+    : null;
 
   console.log("Token recibido:", token);
 
@@ -30,9 +32,9 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
   }
 
   try {
-    const decoded = jwt.verify(token, KeyToken); // Verificar el token
-    req.body.user = decoded; // Guardamos los datos decodificados en `req.body`
-    next(); // Continuar con el siguiente middleware o controlador
+    const decoded = jwt.verify(token, KeyToken);
+    req.body.user = decoded;
+    next();
   } catch (err) {
     return res.status(403).json({
       authentication: "JWT verification failed",

@@ -18,6 +18,7 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
 const token = store.getState().auth.token;
 if (!token) {
   throw new Error("No se encontró un token de autenticación.");
+  alert(token)
 }
 
 // Headers comunes con autorización
