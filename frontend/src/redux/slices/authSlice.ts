@@ -7,9 +7,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem("authToken"), // Leemos el token del localStorage
+  token: localStorage.getItem("authToken"),
   userId: localStorage.getItem("userId"),
-  isLoggedIn: !!localStorage.getItem("authToken"), // Si hay un token, está logueado
+  isLoggedIn: !!localStorage.getItem("authToken"),
 };
 
 const authSlice = createSlice({
@@ -22,15 +22,14 @@ const authSlice = createSlice({
     ) => {
       const { token, userId } = action.payload;
 
-      state.token = token; // Guardamos el token en el estado
+      state.token = token;
       state.isLoggedIn = true;
 
-      // Guardamos el token en el localStorage con la clave 'authToken'
       localStorage.setItem("authToken", token);
 
       if (userId) {
         state.userId = userId;
-        localStorage.setItem("userId", userId); // Guardamos el userId en localStorage
+        localStorage.setItem("userId", userId);
       }
     },
 
@@ -39,7 +38,6 @@ const authSlice = createSlice({
       state.userId = null;
       state.isLoggedIn = false;
 
-      // Eliminar token y userId del localStorage
       localStorage.removeItem("authToken");
       localStorage.removeItem("userId");
     },

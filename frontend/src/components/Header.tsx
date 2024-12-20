@@ -29,7 +29,7 @@ const Header: React.FC = () => {
 
   const handleLogOut = () => {
     dispatch(logOut());
-    navigate("/login"); // Redirigir al login después de cerrar sesión
+    navigate("/login");
   };
 
   const goToAccount = () => {

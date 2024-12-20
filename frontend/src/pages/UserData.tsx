@@ -22,9 +22,7 @@ const UserData = () => {
           setUserRecipes(recipes);
         }
       } catch (error: any) {
-        setServerError(error.message);
-        setUserData(null);
-        setUserRecipes([]);
+        setServerError(error.message || "Error al cargar los datos del servidor.");
       }
     };
 
@@ -33,9 +31,11 @@ const UserData = () => {
 
   if (serverError) {
     return (
-      <Typography color="error" variant="h6" align="center" gutterBottom>
-        Error: {serverError}
-      </Typography>
+      <Container>
+        <Typography color="error" variant="h6" align="center" gutterBottom>
+          {serverError}
+        </Typography>
+      </Container>
     );
   }
 
@@ -44,16 +44,17 @@ const UserData = () => {
       {userData ? (
         <>
           <Typography variant="h4" gutterBottom>
-            {userData.name}'s Profile
+            Perfil de {userData.name}
           </Typography>
           <Typography variant="h6" gutterBottom>
             Email: {userData.email}
           </Typography>
+
           <Typography variant="h5" gutterBottom>
             Favoritos:
           </Typography>
           <Grid container spacing={4}>
-            {userData.favorites.length > 0 ? (
+            {userData.favorites.length ? (
               userData.favorites.map((favorite: any, index: number) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
                   <RecipeReviewCard card={favorite} />
@@ -63,11 +64,12 @@ const UserData = () => {
               <Typography variant="body1">No tienes recetas favoritas.</Typography>
             )}
           </Grid>
+
           <Typography variant="h5" gutterBottom>
             Mis Recetas:
           </Typography>
           <Grid container spacing={4}>
-            {userRecipes.length > 0 ? (
+            {userRecipes.length ? (
               userRecipes.map((recipe) => (
                 <Grid item key={recipe._id} xs={12} sm={6} md={4}>
                   <RecipeReviewCard card={recipe} />

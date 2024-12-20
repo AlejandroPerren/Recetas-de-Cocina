@@ -14,16 +14,17 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
   }
   return response.json();
 }
-// Obtén el token directamente del estado de Redux
-const token = store.getState().auth.token;
-if (!token) {
-  throw new Error("No se encontró un token de autenticación.");
-  alert(token)
+function getToken() {
+  const token = store.getState().auth.token;
+  if (!token) {
+    throw new Error("No se encontró un token de autenticación.");
+  }
+  return token;
 }
 
-// Headers comunes con autorización
+
 const commonHeaders = {
-  Authorization: `Bearer ${token}`,
+  Authorization: `Bearer ${getToken()}`,
   "Content-Type": "application/json",
 };
 
@@ -87,9 +88,7 @@ export async function CreateNewRecipe(recipe: ICreateRecipe): Promise<any> {
 export async function UpdateRecipe(recipe: ICreateRecipe, id: string): Promise<any> {
   return fetchData(`${SummaryApi.UpdateRecipe.url}/${id}`, {
     method: SummaryApi.UpdateRecipe.method,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: commonHeaders,
     body: JSON.stringify(recipe),
   });
 }

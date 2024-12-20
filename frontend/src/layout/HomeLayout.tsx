@@ -1,39 +1,48 @@
+import React from "react";
 import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const HomeLayout = () => {
+const HomeLayout: React.FC = () => {
   return (
     <>
       <Header />
       <Container
         maxWidth={false}
         sx={{
-          height: "100vh",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          minHeight: "100vh",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          flexDirection: "column",
           backgroundColor: "grey",
         }}
       >
         <Box
           sx={{
-            width: "100%",
-            bgcolor: "white",
-            boxShadow: 3,
-            p: 3,
-            borderRadius: 2,
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 2,
           }}
         >
-          <Outlet />
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: 2000, 
+              bgcolor: "white",
+              boxShadow: 3,
+              p: { xs: 2, sm: 3 },
+              borderRadius: 2,
+            }}
+          >
+            <Outlet />
+          </Box>
         </Box>
+        <Footer />
       </Container>
-      <Footer/>
     </>
-  );   
+  );
 };
 
 export default HomeLayout;
